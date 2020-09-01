@@ -1,0 +1,78 @@
+###LINGUAGGIO - ITALIANO###
+###Cio' che e' scritto tra <QUESTI SIMBOLI> non deve essere toccato###
+###CODICI COLORI - Default di minecraft.
+#&0 - Nero
+#&1 - Blu scuro
+#&2 - Verde scuro
+#&3 - Verde acqua scuro
+#&4 - Rosso scuro
+#&5 - Viola
+#&6 - Oro
+#&7 - Grigio
+#&8 - Grigio scuro
+#&9 - Blu
+#&a - Verde
+#&b - Verde acqua
+#&c - Rosso
+#&d - Rosa
+#&e - Giallo
+#&f - Rosa
+#&r - Reset
+#&l - Grassetto
+#&m - Barrato
+#&n - Sottolineato
+#&o - Corsivo
+
+RELOAD: "&d[Karma] &rFile di configurazione, dati, linguaggio e permessi ricaricati!"
+SAVE: "&d[Karma] &rDati salvati manualmente!"
+VERSION: "&d[Karma] &7Versione corrente: &f<VERSION>"
+
+HELP_HELP: "&d<HELP_COMMAND> &rmostra questo messaggio."
+HELP_RELOAD: "&d<RELOAD_COMMAND> &rricarica il plugin."
+HELP_SAVE: "&d<SAVE_COMMAND> &rsalva i dati del plugin."
+HELP_VIEW: "&d<VIEW_COMMAND> &rmostra il Karma di un giocatore."
+HELP_ADD: "&d<ADD_COMMAND> &raaggiunge Karma ad un giocatore."
+HELP_REMOVE: "&d<REMOVE_COMMAND> &rrimuove Karma da un giocatore."
+HELP_SET: "&d<SET_COMMAND> &rimposta il Karma di un giocatore ad una cifra."
+HELP_CLEAR: "&d<CLEAR_COMMAND> &rripristina il tuo Karma."
+HELP_RESET: "&d<RESET_COMMAND> &razzera il Karma di un giocatore."
+HELP_LIST: "&d<LIST_COMMAND> &rVisualizza una lista di giocatori online, in base al Karma."
+HELP_HISTORY: "<HISTORY_COMMAND> &rMostra i cambiamenti nel karma del giocatore scelto."
+
+ERROR_UNKNOWN_COMMAND: "&4Comando sconosciuto. Digita &c/karma aiuto &4per ricevere aiuto."
+ERROR_MISUSE: "&4Uso errato del comando &c/karma&4, ritenta."
+ERROR_NO_PERMISSION: "&4Non hai i permessi per utilizzare questo comando.!"
+ERROR_UNKNOWN_PLAYER: "&4Il giocatore specificato non e' online."
+ERROR_INVALID_NUMBER: "&4Numero invalido/il totale supera il limite di Karma (<LOW_LIMIT>/<HIGH_LIMIT>)."
+
+SCORE_ADDED_SUCCESSFULLY_SELF: "&d[Karma] &fTi sei aggiunto &a<NUMBER> &fpunti Karma."
+SCORE_REMOVED_SUCCESSFULLY_SELF: "&d[Karma] &fTi sei rimosso &c<NUMBER> &fpunti Karma."
+SCORE_SET_SUCCESSFULLY_SELF: "&d[Karma] &fHai impostato il tuo Karma a &e<NUMBER>."
+SCORE_CLEARED_SUCCESSFULLY: "&d[Karma] &fHai azzerato il tuo Karma."
+
+VIEW_SCORE_SELF: "&d[Karma] &fIl tuo Karma e' &e<NUMBER>"
+VIEW_ALIGNMENT_SELF: "&d[Karma] &fIl tuo allineamento e' <ALIGNMENT> &f."
+
+SCORE_ADDED_SUCCESSFULLY: "&d[Karma] &fAggiunto &a<NUMBER> &fpunti Karma a &e<PLAYER>."
+SCORE_REMOVED_SUCCESSFULLY: "&d[Karma] &fRimosso &c<NUMBER> &fpunti Karma da &e<PLAYER>."
+SCORE_SET_SUCCESSFULLY: "&d[Karma] &fImpostato il Karma di &e<PLAYER>&f a &e<NUMBER>."
+SCORE_RESET_SUCCESSFULLY: "&d[Karma] &fAzzerato il Karma di &e<PLAYER>&r."
+SCORE_ADDED_REASON: "&d[Karma] &fHai guadagnato &a<AMOUNT> &fKarma: &e<REASON>"
+SCORE_REMOVED_REASON: "&d[Karma] &fHai perso &c<AMOUNT> &fKarma: &e<REASON>"
+SCORE_SET_REASON: "&d[Karma] &fIl tuo karma e' stato impostato a &b<AMOUNT>: &e<REASON>"
+SCORE_RESET_REASON: "&d[Karma] &fIl tuo karma e' stato azzerato&f: &e<REASON>"
+
+VIEW_SCORE: "&d[Karma] &fIl Karma di &e<PLAYER>&f e' &e<NUMBER>"
+VIEW_ALIGNMENT: "&d[Karma] &fL'allineamento di &e<PLAYER>&f e' <ALIGNMENT>&f."
+
+
+###PAROLE###
+
+NUMBER: "Numero"
+PLAYER: "Giocatore"
+DATE: "Data"
+TIME: "Ora"
+SOURCE: "Fonte"
+AMOUNT: "Cifra"
+ALIGNMENT: "Allineamento"
+REASON: "Motivo"

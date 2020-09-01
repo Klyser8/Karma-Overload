@@ -1,0 +1,78 @@
+###NGÔN NGỮ - TIẾNG VIỆT###
+###NHỮNG THỨ <TRONG KÍ TỰ NÀY> Thì đừng động vào###
+###MÃ MÀU - Đây là những mã màu mặc định.
+#&0 - Đen
+#&1 - Xanh Nước Biển Đậm
+#&2 - Xanh Lục Đậm
+#&3 - Xanh Da Trời Đậm
+#&4 - Đỏ Đậm
+#&5 - Tím
+#&6 - Cam
+#&7 - Xám
+#&8 - Xám Đậm
+#&9 - Xanh Nước Biển
+#&a - Xanh Lục
+#&b - Xanh Da Trời
+#&c - Đỏ
+#&d - Hồng
+#&e - Vàng
+#&f - Trắng
+#&r - Xóa Màu
+#&l - Đậm
+#&m - Gạch Giữa
+#&n - Gạch Dưới
+#&o - Nghiêng
+
+RELOAD: "&d[Karma] &rCấu Hình, Dữ Liệu, Ngôn Ngữ và Quyền đã được tải lại!"
+SAVE: "&d[Karma] &rDữ liệu đã được lưu lại!"
+VERSION: "&d[Karma] &7Current version: &f<VERSION>"
+
+ERROR_MISUSE: "&4Dùng sai lệnh, hãy thử &c/karma&4."
+ERROR_UNKNOWN_COMMAND: "&4Sai Lệnh. Hãy dùng &c/karma help &4để xem hướng dẫn."
+ERROR_NO_PERMISSION: "&4Bạn không có quyền để dùng lệnh này!"
+ERROR_UNKNOWN_PLAYER: "&4Người này chưa bao giờ chơi trên server."
+ERROR_INVALID_NUMBER: "&4Sai số hoặc số này vượt quá giới hạn Karma (<LOW_LIMIT>/<HIGH_LIMIT>)."
+
+HELP_HELP: "&d<HELP_COMMAND> &rhiển thị hướng dẫn này."
+HELP_RELOAD: "&d<RELOAD_COMMAND> &rtải lại plugin."
+HELP_SAVE: "&d<SAVE_COMMAND> &rlưu dữ liệu người chơi."
+HELP_VIEW: "&d<VIEW_COMMAND> &rhiện số Karma của người chơi."
+HELP_ADD: "&d<ADD_COMMAND> &rthêm Karma cho người chơi."
+HELP_REMOVE: "&d<REMOVE_COMMAND> &rbớt Karma của người chơi."
+HELP_SET: "&d<SET_COMMAND> &rđặt số Karma cho người chơi."
+HELP_CLEAR: "&d<CLEAR_COMMAND> &rxóa nghiệp chướng của bạn."
+HELP_RESET: "&d<RESET_COMMAND> &rxóa hết Karma của người chơi."
+HELP_LIST: "&d<LIST_COMMAND> &rHiện danh sách những người đang chơi và số Karma của họ."
+HELP_HISTORY: "<HISTORY_COMMAND> &rDisplays how the specified player's karma has recently changed."
+
+SCORE_ADDED_SUCCESSFULLY_SELF: "&d[Karma] &fBạn nhận được &a<NUMBER> &fđiểm Karma."
+SCORE_REMOVED_SUCCESSFULLY_SELF: "&d[Karma] &fBạn đã bớt &c<NUMBER> &fđiểm Karma."
+SCORE_SET_SUCCESSFULLY_SELF: "&d[Karma] &fBạn đặt diểm Karma của bạn thành &e<NUMBER>."
+SCORE_CLEARED_SUCCESSFULLY: "&d[Karma] &fBạn đã xóa hết Karma của bạn."
+
+VIEW_SCORE_SELF: "&d[Karma] &fSố Karma của bạn là &e<NUMBER>"
+VIEW_ALIGNMENT_SELF: "&d[Karma] &fDanh hiệu của bạn là <ALIGNMENT> &f."
+
+SCORE_ADDED_SUCCESSFULLY: "&d[Karma] &fĐã gửi &a<NUMBER> &fđiểm Karma cho &e<PLAYER>."
+SCORE_REMOVED_SUCCESSFULLY: "&d[Karma] &fĐã bớt &c<NUMBER> &fđiểm Karma của &e<PLAYER>."
+SCORE_SET_SUCCESSFULLY: "&d[Karma] &fĐã đặt cho &e<PLAYER>&f thành &e<NUMBER>&f điểm Karma&e."
+SCORE_RESET_SUCCESSFULLY: "&d[Karma] &fĐã xóa hết điểm Karma của &e<PLAYER>&f."
+SCORE_ADDED_REASON: "&d[Karma] &fYou gained &a<AMOUNT> &fKarma: &e<REASON>"
+SCORE_REMOVED_REASON: "&d[Karma] &fYou lost &c<AMOUNT> &fKarma: &e<REASON>"
+SCORE_SET_REASON: "&d[Karma] &fYour Karma has been set to &b<AMOUNT>: &e<REASON>"
+SCORE_RESET_REASON: "&d[Karma] &fYour Karma has been&b reset&f: &e<REASON>"
+
+VIEW_SCORE: "&d[Karma] &e<PLAYER>&f có &e<NUMBER>&f điểm Karma"
+VIEW_ALIGNMENT: "&d[Karma] &fDanh hiệu của&e<PLAYER>&f là <ALIGNMENT> &f."
+
+
+###TỪ KHÓA###
+
+NUMBER: "Số"
+PLAYER: "Người Chơi"
+DATE: "Date"
+TIME: "Time"
+SOURCE: "Source"
+AMOUNT: "Amount"
+ALIGNMENT: "Alignment"
+REASON: "Reason"

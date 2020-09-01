@@ -1,0 +1,7 @@
+name: KarmaOverload
+version: ${project.version}
+main: com.github.klyser8.karmaoverload.KarmaOverload
+api-version: 1.13
+softdepend: [PlaceholderAPI, ProtocolLib, Worldguard, Citizens, Votifier]
+authors: [Klyser8]
+description: See how good or bad a player behaves in your server, with this score-alignment based system.

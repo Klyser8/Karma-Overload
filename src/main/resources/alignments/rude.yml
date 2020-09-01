@@ -1,0 +1,81 @@
+Name: "Rude"
+Color: "&e"
+Kill Penalty: 1.0
+Karma Gain Repeat Multiplier: 0.5
+Karma Loss Repeat Multiplier: 2.0
+Karma Limit:
+  Amount: 300.0
+Thresholds:
+  Low: -14999
+  High: -5000
+Sound: block.end_portal.spawn(1.0, 1.0)
+Particles: true
+
+Actions:
+  PASSIVE: chance = 1.0; amount = 1.0; interval = 300; permission = karma.action.passive
+  FRIENDLY_MOB_KILLING: chance = 1.0; amount = -10.0; permission = karma.action.mob_killing.friendly
+  PASSIVE_MOB_KILLING: chance = 1.0; amount = -1.0; permission = karma.action.mob_killing.passive
+  HOSTILE_MOB_KILLING: chance = 1.0; amount = 1.0; permission = karma.action.mob_killing.hostile
+  PLAYER_HITTING: chance = 1.0; amount = -0.5; permission = karma.action.hitting.player
+  FRIENDLY_MOB_HITTING: chance = 1.0; amount = -1.0; permission = karma.action.hitting.friendly
+  TRADING: chance = 1.0; amount = 3.0; permission = karma.action.trading
+  BARTERING: chance = 1.0; amount = -3.0; permission = karma.action.barter
+  TAMING: chance = 1.0; amount = 5.0; permission = karma.action.taming
+  FEEDING: chance = 0.5; amount = 0.5; babiesEnabled = false; permission = karma.action.feeding
+  SERVER_VOTING: chance = 1.0; amount = 25.0; permission = karma.action.voting; sound = ui.toast.challenge_complete(1.0, 1.25)
+  EATING:
+    - GOLDEN_APPLE{chance = 1.0; amount = -2.5; permission = karma.action.food.golden_apple; sound = entity.zombie_villager.converted(1.0, 2.0)}
+    - ENCHANTED_GOLDEN_APPLE{chance = 1.0; amount = -50.0; permission = karma.action.food.ench_golden_apple; sound = entity.zombie_villager.converted(1.0, 2.0)}
+  BLOCK_PLACING:
+    - TNT{chance = 1.0; amount = -1.0; permission = karma.action.block.place.tnt}
+    - LAVA_BUCKET{chance = 1.0; amount = -1.0; permission = karma.action.block.place.lava}
+  BLOCK_BREAKING:
+    - TNT{chance = 1.0; amount = 1.0; permission = karma.action.block.break.tnt}
+    - LAVA{chance = 1.0; amount = 1.0; permission = karma.action.block.break.lava}
+  MESSAGING:
+    - blackspigot{chance = 1.0; amount = -1.0; permission = karma.action.message.blackspigot}
+    - dumb{chance = 1.0; amount = -3.0; permission = karma.action.message.dumb}
+    - thank you{chance = 1.0; amount = 1.0; permission = karma.action.message.thank_you}
+  ADVANCEMENT:
+    - minecraft:husbandry/breed_an_animal{chance = 1.0; amount = 10.0; permission = karma.action.adv.breed_animal}
+    - minecraft:husbandry/bred_all_animals{chance = 1.0; amount = 150.0; permission = karma.action.adv.bred_animals}
+    - minecraft:husbandry/tame_an_animal{chance = 1.0; amount = 10.0; permission = karma.action.adv.tame_animal}
+    - minecraft:husbandry/complete_catalogue{chance = 1.0; amount = 100.0; permission = karma.action.adv.catalogue}
+
+    - minecraft:story/cure_zombie_villager{chance = 1.0; amount = 100.0; permission = karma.action.adv.cure_zombie}
+
+    - minecraft:adventure/hero_of_the_village{chance = 1.0; amount = 250.0; permission = karma.action.adv.village_hero}
+    - minecraft:adventure/very_very_frightening{chance = 1.0; amount = -150.0; permission = karma.action.adv.frightening}
+    - minecraft:adventure/kill_a_mob{chance = 1.0; amount = 5.0; permission = karma.action.adv.kill_a_mob}
+    - minecraft:adventure/sniper_duel{chance = 1.0; amount = 25.0; permission = karma.action.adv.sniper_duel}
+    - minecraft:adventure/summon_iron_golem{chance = 1.0; amount = 50.0; permission = karma.action.adv.summon_golem}
+    - minecraft:adventure/two_birds_one_arrow{chance = 1.0; amount = 100.0; permission = karma.action.adv.two_birds}
+    - minecraft:adventure/arbalistic{chance = 1.0; amount = 100.0; permission = karma.action.adv.arbalistic}
+
+    - minecraft:nether/return_to_sender{chance = 1.0; amount = 30.0; permission = karma.action.adv.return_to_sender}
+    - minecraft:nether/uneasy_alliance{chance = 1.0; amount = -100.0; permission = karma.action.adv.uneasy_alliance}
+    - minecraft:nether/loot_bastion{chance = 1.0; amount = -30.0; permission = karma.action.adv.loot_bastion}
+    - minecraft:nether/summon_wither{chance = 1.0; amount = -1000.0; permission = karma.action.adv.summon_wither}
+    - minecraft:nether/ride_strider{chance = 1.0; amount = -50.0; permission = karma.action.adv.ride_strider}
+
+    - minecraft:end/kill_dragon{chance = 1.0; amount = -500.0; permission = karma.action.adv.kill_dragon}
+    - minecraft:end/respawn_dragon{chance = 1.0; amount = 250.0; permission = karma.action.adv.respawn_dragon}
+
+Effects:
+  KARMA_MULTIPLIER: chance = 1.0; gainMult = 1.25; lossMult = 1.0; perm = karma.effect.karma_mult;
+  EXP_MULTIPLIER: chance = 0.2; mult = 0.9; permission = karma.effect.exp_mult; sound = block.note_block.didgeridoo(1.0, 1.0)
+  LIGHTNING: chance = 0.1; permission = karma.effect.lightning; prepareSound = entity.illusioner.prepare_blindness(5.0, 0.75)
+  MOB_ANGER: chance = 0.005; radius = 5; permission = karma.effect.anger; sound = entity.polar_bear.warning(2.0, 1.25)
+  LOOT_GENERATION: chance = 0.2; mult = 0.9; permission = karma.effect.loot; sound = block.note_block.banjo(1.0, 0.5)
+  MINERAL_FAIL:
+    - COAL_ORE{chance = 0.3; permission = karma.effect.mineral.fail.coal; sound = block.bell.use(1.0, 0.5)}
+    - IRON_ORE{chance = 0.2; permission = karma.effect.mineral.fail.iron; sound = block.bell.use(1.0, 0.5)}
+    - GOLD_ORE{chance = 0.2; permission = karma.effect.mineral.fail.gold; sound = block.bell.use(1.0, 0.5)}
+    - REDSTONE_ORE{chance = 0.2; permission = karma.effect.mineral.fail.redstone; sound = block.bell.use(1.0, 0.5)}
+    - LAPIS_ORE{chance = 0.2; permission = karma.effect.mineral.fail.lapis; sound = block.bell.use(1.0, 0.5)}
+    - EMERALD_ORE{chance = 0.1; permission = karma.effect.mineral.fail.emerald; sound = block.bell.use(1.0, 0.5)}
+    - DIAMOND_ORE{chance = 0.1; permission = karma.effect.mineral.fail.diamond; sound = block.bell.use(1.0, 0.5)}
+    - NETHER_QUARTZ_ORE{chance = 0.2; permission = karma.effect.mineral.fail.quartz; sound = block.bell.use(1.0, 0.5)}
+
+Commands:
+  - "say %player% is rude"

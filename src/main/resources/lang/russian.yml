@@ -1,0 +1,77 @@
+###LANGUAGE - ENGLISH###
+###Anything between <THESE SYMBOLS> must not be touched###
+###COLOR CODING - Default Minecraft color coding.
+#&0 - Black
+#&1 - Dark Blue
+#&2 - Dark Green
+#&3 - Dark Aqua
+#&4 - Dark Red
+#&5 - Purple
+#&6 - Gold
+#&7 - Gray
+#&8 - Dark Gray
+#&9 - Blue
+#&a - Green
+#&b - Aqua
+#&c - Red
+#&d - Pink
+#&e - Yellow
+#&f - White
+#&r - Reset
+#&l - Bold
+#&m - Strikethrough
+#&n - Underlined
+#&o - Italic
+
+RELOAD: "&d[Карма] &rВся конфигурация успешно перезагружена!"
+SAVE: "&d[Карма] &rДанные успешно сохранены!"
+VERSION: "&d[Karma] &7Current version: &f<VERSION>"
+
+ERROR_MISUSE: "&4Ошибочное использование комманды &c/karma&4, попробуйте снова."
+ERROR_UNKNOWN_COMMAND: "&4Неизвестная команда. Введите &c/karma help &4для справки."
+ERROR_NO_PERMISSION: "&4YУ вас недостаточно прав для использования данной команды!"
+ERROR_UNKNOWN_PLAYER: "&4Этот игрок никогда не играл на сервере."
+ERROR_INVALID_NUMBER: "&4Неверное число / сумма превышает лимит кармы (<LOW_LIMIT>/<HIGH_LIMIT>)."
+
+HELP_HELP: "&d<HELP_COMMAND> &rпоказывает это сообщение."
+HELP_RELOAD: "&d<RELOAD_COMMAND> &rперезагружает плагин."
+HELP_SAVE: "&d<SAVE_COMMAND> &rсохраняет данные плагина."
+HELP_VIEW: "&d<VIEW_COMMAND> &rотображает карму игрока."
+HELP_ADD: "&d<ADD_COMMAND> &rдобавляет карму игроку."
+HELP_REMOVE: "&d<REMOVE_COMMAND> &rубрать карму из общего количества."
+HELP_SET: "&d<SET_COMMAND> &rустановить карму игроку."
+HELP_CLEAR: "&d<CLEAR_COMMAND> &rочищает вашу карму."
+HELP_RESET: "&d<RESET_COMMAND> &rочистить карму игрока."
+HELP_LIST: "&d<LIST_COMMAND> &rПоказать список игроков относительно их кармы."
+HELP_HISTORY: "<HISTORY_COMMAND> &rDisplays how the specified player's karma has recently changed."
+
+SCORE_ADDED_SUCCESSFULLY_SELF: "&d[Карма] &fВы выдали себе &a<NUMBER> &fочков кармы."
+SCORE_REMOVED_SUCCESSFULLY_SELF: "&d[Карма] &fВы удалили &c<NUMBER> &fочков кармы у себя."
+SCORE_SET_SUCCESSFULLY_SELF: "&d[Карма] &fВы установили себе карму: &e<NUMBER>."
+SCORE_CLEARED_SUCCESSFULLY: "&d[Карма] &fВы очистили свою карму."
+
+VIEW_SCORE_SELF: "&d[Карма] &fВаша карма: &e<NUMBER>"
+VIEW_ALIGNMENT_SELF: "&d[Карма] &fВаш статус кармы: <ALIGNMENT>&f."
+
+SCORE_ADDED_SUCCESSFULLY: "&d[Карма] &fДобавлено &a<NUMBER> &fочков кармы игроку &e<PLAYER>."
+SCORE_REMOVED_SUCCESSFULLY: "&d[Карма] &fУдалено &c<NUMBER> &fочков кармы у &e<PLAYER>."
+SCORE_SET_SUCCESSFULLY: "&d[Карма] &fУстановлено карму &e<PLAYER>&f в размере &e<NUMBER>."
+SCORE_RESET_SUCCESSFULLY: "&d[Карма] &fОчищено карму игрока &e<PLAYER>&f."
+SCORE_ADDED_REASON: "&d[Karma] &fYou gained &a<AMOUNT> &fKarma: &e<REASON>"
+SCORE_REMOVED_REASON: "&d[Karma] &fYou lost &c<AMOUNT> &fKarma: &e<REASON>"
+SCORE_SET_REASON: "&d[Karma] &fYour Karma has been set to &b<AMOUNT>: &e<REASON>"
+SCORE_RESET_REASON: "&d[Karma] &fYour Karma has been&b reset&f: &e<REASON>"
+
+VIEW_SCORE: "&d[Карма] &f Карма игрока &e<PLAYER>&f: &e<NUMBER>"
+VIEW_ALIGNMENT: "&d[Карма] &f Статус кармы игрока &e<PLAYER>&f: <ALIGNMENT> &f."
+
+###KEYWORDS###
+
+NUMBER: "Number"
+PLAYER: "Player"
+DATE: "Date"
+TIME: "Time"
+SOURCE: "Source"
+AMOUNT: "Amount"
+ALIGNMENT: "Alignment"
+REASON: "Reason"

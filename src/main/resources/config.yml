@@ -1,0 +1,51 @@
+### AVAILABLE LANGUAGES - English, Spanish, Italian, Russian, Vietnamese, Simplified Chinese, French, Dutch.
+Language: English
+
+#Level of debugging:
+#NONE: No debugging will be made.
+#LOW: debugging on start-up and shut-down
+#HIGH: debugging on Karma changes and alignment changes, plus the above
+Debug Level: NONE
+
+#Whether commands should play sounds when being used.
+Command Sound: true
+
+###STORAGE CONFIGURATION####
+
+#Storage Type
+#1: Json
+#2: MySQL Database
+Storage Type: 1
+
+#Auto-save interval (In ticks)
+Autosave Interval: 120
+
+###DATABASE CONFIGURATION###
+Database:
+  Name: name
+  Host: host
+  Port: 8888
+  Username: root
+  Password: password
+
+#---------------------------------KARMA PREFERENCES----------------------------------------#
+
+#The default starting score for players. Can be any number that is an integer. Keep in mind that 2147483647 is the highest integer usable, while
+#-2147483647 is the lowest.
+Starting Score: 0
+
+#The size that a player's Karma History should be. Lower values results in higher performance.
+Karma History Size: 25
+
+#How often players karma gain/loss limits should reset (in seconds). Very low numbers may cause lag.
+Karma Limit Reset Interval: 3600
+
+#Whether the karma limit should be a soft cap or not.
+#If this is set to true, a player's Karma will change even if it would go over their alignment's Karma limit, as long as they are not above it before the Karma has changed.
+#  - Example: Player's alignment limit is 300 Karma. The player's current recent Karma is 290, and they gain 30 from a single source.
+#             The player gains the 30 Karma, reaching 320 recent Karma. Their Karma will not change any further until the recent Karma is reset.
+
+#If this is set to false, a player's Karma will not change if it would go over their current Karma limit.
+#  - Example: Player's alignment limit is 300 Karma. The player's current recent Karma is 290, and they lose 15 from a single source.
+#             The player does not lose any Karma, as it would go over their alignment's limit.
+Karma Soft Cap: true

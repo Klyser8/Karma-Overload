@@ -1,0 +1,76 @@
+###LANGUAGE - Nederlands###
+###Alles <tussen deze symbolen> Mag niet veranderd worden###
+###Kleur codering - Standart Minecraft kleuren codering.
+#&0 - Zwart
+#&1 - Donker blauw
+#&2 - Donker groen
+#&3 - Donker terquoise
+#&4 - Donker rood
+#&5 - Paars
+#&6 - Goud
+#&7 - Grijs
+#&8 - Donker grijs
+#&9 - Blauw
+#&a - Groen
+#&b - Terquoise
+#&c - Rood
+#&d - Roze
+#&e - Geel
+#&f - Wit
+#&r - Reset
+#&l - Dikgedrukt
+#&m - Doorstreept
+#&n - Onderstreept
+#&o - Schuingedrukt
+
+RELOAD: "&d[Karma] &rConfig, Data, taal en rechten zijn herladen"
+SAVE: "&d[Karma] &rData bestanden zijn handmatig opgeslagen!"
+VERSION: "&d[Karma] &7Current version: &f<VERSION>"
+
+ERROR_MISUSE: "&4Verkeer gebruik van command &c/karma&4, probeer opnieuw."
+ERROR_UNKNOWN_COMMAND: "&4Onbekend command. Type &c/karma help &4voor help."
+ERROR_NO_PERMISSION: "&4Je hebt geen rechten om dit command te gebruiken"
+ERROR_UNKNOWN_PLAYER: "&4De betreffende speler is niet online."
+ERROR_INVALID_NUMBER: "&4Het ingevoerde nummmer is niet mogelijk."
+
+HELP_HELP: "&d<HELP_COMMAND> &rLaat dit bericht zien"
+HELP_RELOAD: "&d<RELOAD_COMMAND> &rHerlaad de plugin"
+HELP_SAVE: "&d<SAVE_COMMAND> &rDe plugin data word opgeslagen"
+HELP_VIEW: "&d<VIEW_COMMAND> &rToont spelers karma"
+HELP_ADD: "&d<ADD_COMMAND> &rGeef een speler karma"
+HELP_REMOVE: "&d<REMOVE_COMMAND> &rHaal karma van een speler af"
+HELP_SET: "&d<SET_COMMAND> &Zet het karma van een speler op een specefiek niveau"
+HELP_CLEAR: "&d<CLEAR_COMMAND> &rzuivert je karma"
+HELP_RESET: "&d<RESET_COMMAND> &rreset spelers karma level"
+HELP_LIST: "&d<LIST_COMMAND> &rToont een lijst met alle spelers en hun karma level"
+HELP_HISTORY: "<HISTORY_COMMAND> &rDisplays how the specified player's karma has recently changed."
+
+SCORE_ADDED_SUCCESSFULLY_SELF: "&d[Karma] &fJe geeft jezelf &a<NUMBER> &fKarma points."
+SCORE_REMOVED_SUCCESSFULLY_SELF: "&d[Karma] &fJe verwijderd &c<NUMBER> &fKarma points van jezelf."
+SCORE_SET_SUCCESSFULLY_SELF: "&d[Karma] &fJe zet je karma score op &e<NUMBER>."
+SCORE_CLEARED_SUCCESSFULLY_SELF: "&d[Karma] &fJe karma score is gereset."
+
+VIEW_SCORE_SELF: "&d[Karma] &fje Karma score is &e<NUMBER>"
+VIEW_ALIGNMENT_SELF: "&d[Karma] &fje karma rank is <ALIGNMENT> &f."
+
+SCORE_ADDED_SUCCESSFULLY: "&d[Karma] &fGeeft &a<NUMBER> &fKarma points aan &e<PLAYER>."
+SCORE_REMOVED_SUCCESSFULLY: "&d[Karma] &fVerwijderd &c<NUMBER> &fKarma points van &e<PLAYER>."
+SCORE_SET_SUCCESSFULLY: "&d[Karma] &fZet &e<PLAYER>&f's Karma score naar &e<NUMBER>."
+SCORE_CLEARED_SUCCESSFULLY: "&d[Karma] &fVerwijderd &e<PLAYER>&f's Karma score."
+SCORE_ADDED_REASON: "&d[Karma] &fYou gained &a<AMOUNT> &fKarma: &e<REASON>"
+SCORE_REMOVED_REASON: "&d[Karma] &fYou lost &c<AMOUNT> &fKarma: &e<REASON>"
+SCORE_SET_REASON: "&d[Karma] &fYour Karma has been set to &b<AMOUNT>: &e<REASON>"
+SCORE_RESET_REASON: "&d[Karma] &fYour Karma has been&b reset&f: &e<REASON>"
+
+VIEW_SCORE: "&d[Karma] &e<PLAYER>&f's Karma score is &e<NUMBER>"
+VIEW_ALIGNMENT: "&d[Karma] &e<PLAYER>&f's karma rank is <ALIGNMENT>&f."
+
+
+NUMBER: "Nummer"
+PLAYER: "Speler"
+DATE: "Date"
+TIME: "Time"
+SOURCE: "Source"
+AMOUNT: "Amount"
+ALIGNMENT: "Alignment"
+REASON: "Reason"

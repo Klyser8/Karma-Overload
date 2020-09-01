@@ -1,0 +1,77 @@
+###语言文件 - 简体中文###
+###请勿修改介于 < > 之间的内容###
+###颜色代码
+#&0 - 黑色
+#&1 - 深蓝
+#&2 - 深绿
+#&3 - 湖蓝
+#&4 - 深红
+#&5 - 紫色
+#&6 - 金色
+#&7 - 灰色
+#&8 - 深灰
+#&9 - 蓝色
+#&a - 绿色
+#&b - 天蓝
+#&c - 红色
+#&d - 粉色
+#&e - 黄色
+#&f - 白色
+#&r - 重置
+#&l - 粗体
+#&m - 删除线
+#&n - 下划线
+#&o - 斜体
+
+RELOAD: "&d[业] &r成功重载插件!"
+SAVE: "&d[业] &r已成功手动保存数据文件!"
+VERSION: "&d[Karma] &7Current version: &f<VERSION>"
+
+HELP_HELP: "&d<HELP_COMMAND> &r显示这条帮助信息。"
+HELP_RELOAD: "&d<RELOAD_COMMAND> &r重载插件。"
+HELP_SAVE: "&d<SAVE_COMMAND> &r保存该插件数据。"
+HELP_VIEW: "&d<VIEW_COMMAND> &r查看玩家的业。"
+HELP_ADD: "&d<ADD_COMMAND> &r增加玩家的业。"
+HELP_REMOVE: "&d<REMOVE_COMMAND> &r移除玩家的业。"
+HELP_SET: "&d<SET_COMMAND> &r设置玩家的业为指定的数值。"
+HELP_CLEAR: "&d<CLEAR_COMMAND> &r清除你的业力。"
+HELP_RESET: "&d<RESET_COMMAND> &r清空玩家的业。"
+HELP_LIST: "&d<LIST_COMMAND> &r显示所有在线玩家的业。"
+HELP_HISTORY: "<HISTORY_COMMAND> &rDisplays how the specified player's karma has recently changed."
+
+ERROR_MISUSE: "&4这不是 &c/karma &4的正确用法，请再次尝试。"
+ERROR_UNKNOWN_COMMAND: "&4未知指令。 请输入 &c/karma help &4获取帮助。"
+ERROR_NO_PERMISSION: "&4您没有权限使用这个指令"
+ERROR_UNKNOWN_PLAYER: "&4找不到这名玩家。"
+ERROR_INVALID_NUMBER: "&4无效的数字，或该数字超过了业的上限 (<LOW_LIMIT>/<HIGH_LIMIT>)。"
+
+SCORE_ADDED_SUCCESSFULLY_SELF: "&d[业] &f您给予了自己&a<NUMBER>点&f业。"
+SCORE_REMOVED_SUCCESSFULLY_SELF: "&d[业] &f您移除了自己&c<NUMBER>点&f业。"
+SCORE_SET_SUCCESSFULLY_SELF: "&d[业] &f您将自己的业设置为&e<NUMBER>。"
+SCORE_CLEARED_SUCCESSFULLY: "&d[业] &f您清空了您的业。"
+
+VIEW_SCORE_SELF: "&d[业] &f您的业力为 &e<NUMBER>"
+VIEW_ALIGNMENT_SELF: "&d[业] &f您的阵营为 <ALIGNMENT> &f。"
+
+SCORE_ADDED_SUCCESSFULLY: "&d[业] &f已给予&e<PLAYER> &a<NUMBER>点&f业"
+SCORE_REMOVED_SUCCESSFULLY: "&d[业] &f已移除&e<PLAYER>的&c<NUMBER>点&f业。"
+SCORE_SET_SUCCESSFULLY: "&d[业] &f已将&e<PLAYER>&f的业设置为&e<NUMBER>。"
+SCORE_RESET_SUCCESSFULLY: "&d[业] &f已清空&e<PLAYER>的业。"
+SCORE_ADDED_REASON: "&d[Karma] &fYou gained &a<AMOUNT> &fKarma: &e<REASON>"
+SCORE_REMOVED_REASON: "&d[Karma] &fYou lost &c<AMOUNT> &fKarma: &e<REASON>"
+SCORE_SET_REASON: "&d[Karma] &fYour Karma has been set to &b<AMOUNT>: &e<REASON>"
+SCORE_RESET_REASON: "&d[Karma] &fYour Karma has been&b reset&f: &e<REASON>"
+
+VIEW_SCORE: "&d[业] &e<PLAYER>&f的业为&e<NUMBER>"
+VIEW_ALIGNMENT: "&d[业] &e<PLAYER>&f的阵营为<ALIGNMENT> &f。"
+
+###语言###
+
+NUMBER: "数字"
+PLAYER: "玩家"
+DATE: "Date"
+TIME: "Time"
+SOURCE: "Source"
+AMOUNT: "Amount"
+ALIGNMENT: "Alignment"
+REASON: "Reason"
