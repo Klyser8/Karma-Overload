@@ -10,6 +10,7 @@ import com.github.klyser8.karmaoverload.storage.DebugLevel;
 import com.github.klyser8.karmaoverload.storage.Preferences;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -99,9 +100,10 @@ public class EffectListener implements Listener {
         if (!calculateChance(mineral.getChance())) return;
         if (mineral.getBreakSound() != null) mineral.getBreakSound().play(block.getLocation(), SoundCategory.BLOCKS);
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            System.out.println(mineral.getAppearSound());
             if (mineral.getAppearSound() != null) mineral.getAppearSound().play(block.getLocation(), SoundCategory.BLOCKS);
             world.getBlockAt(block.getLocation()).setType(blockType);
+            world.spawnParticle(Particle.CRIT_MAGIC, block.getLocation().add(0.5, 0.5, 0.5), 10, 0.33, 0.33, 0.33, 0.15);
+            world.spawnParticle(Particle.CLOUD, block.getLocation().add(0.5, 0.5, 0.5), 10, 0.33, 0.33, 0.33, 0.05);
         }, 30);
     }
 
@@ -127,6 +129,7 @@ public class EffectListener implements Listener {
         event.setDropItems(false);
         if (blockType.toString().contains("NETHER")) world.dropItem(block.getLocation(), new ItemStack(Material.NETHERRACK));
         else world.dropItem(block.getLocation(), new ItemStack(Material.COBBLESTONE));
+        world.spawnParticle(Particle.FLASH, block.getLocation().add(0.5, 0.5, 0.5), 1);
         if (mineral.getBreakSound() != null) mineral.getBreakSound().play(block.getLocation(), SoundCategory.BLOCKS);
     }
 
@@ -175,6 +178,7 @@ public class EffectListener implements Listener {
         if (event.getFrom().getBlockX() == event.getTo().getBlockX() &&
             event.getFrom().getBlockY() == event.getTo().getBlockY() &&
             event.getFrom().getBlockZ() == event.getTo().getBlockZ()) return;
+        if (profile == null) return; //Avoid NPEs during server reloads.
         Alignment alignment = profile.getAlignment();
         if (!alignment.getKarmaEffects().containsKey(KarmaEffectType.MOB_ANGER)) return;
         MobAngerEffect effect = (MobAngerEffect) alignment.getKarmaEffects().get(KarmaEffectType.MOB_ANGER);

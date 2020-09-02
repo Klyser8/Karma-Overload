@@ -27,7 +27,7 @@ public class ListCommand extends CommandBase {
     private final Sound sound;
     public ListCommand(KarmaOverload plugin) {
         this.plugin = plugin;
-        this.sound = new Sound("ui.button.click", 1.0f, 1.0f);
+        this.sound = new Sound("ui.button.click", 1.0f, 1.5f);
     }
 
     @SubCommand("list")

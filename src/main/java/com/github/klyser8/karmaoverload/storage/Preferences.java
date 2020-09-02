@@ -3,6 +3,7 @@ package com.github.klyser8.karmaoverload.storage;
 import com.github.klyser8.karmaoverload.KarmaOverload;
 import com.github.klyser8.karmaoverload.karma.Alignment;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -35,11 +36,13 @@ public class Preferences {
 
     private boolean worldListEnabler;
     private final List<World> worldList;
+    private final List<GameMode> enabledGameModes;
 
     private final KarmaOverload plugin;
     public Preferences(KarmaOverload plugin) {
         this.plugin = plugin;
         this.worldList = new ArrayList<>();
+        this.enabledGameModes = new ArrayList<>();
     }
 
     public void loadPreferences() {
@@ -69,6 +72,10 @@ public class Preferences {
             if (alignment.getLowThreshold() < lowLimit) lowLimit = alignment.getLowThreshold();
             if (alignment.getHighThreshold() > highLimit) highLimit = alignment.getHighThreshold();
         }
+        for (String gameModeString : config.getStringList("Enabled GameModes")) {
+            enabledGameModes.add(GameMode.valueOf(gameModeString));
+        }
+
         worldListEnabler = config.getBoolean("Enabled World List");
         for (String worldName : config.getStringList("Worlds")) {
             worldList.add(Bukkit.getWorld(worldName));
@@ -150,5 +157,9 @@ public class Preferences {
 
     public List<World> getWorldList() {
         return worldList;
+    }
+
+    public List<GameMode> getEnabledGameModes() {
+        return enabledGameModes;
     }
 }

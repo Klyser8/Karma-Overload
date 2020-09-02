@@ -169,6 +169,11 @@ public class AlignmentFactory {
                     karmaActions.put(KarmaActionType.ADVANCEMENT,
                             new AdvancementAction(plugin, section.getStringList("ADVANCEMENT")));
                     break;
+                case SERVER_VOTING:
+                    karmaActions.put(KarmaActionType.SERVER_VOTING,
+                            new GenericAction(plugin, Double.parseDouble(values.get("amount")), Double.parseDouble(values.get("chance")),
+                                    values.get("permission"), Sound.fromString(values.get("sound"))));
+                    break;
             }
         }
         return karmaActions;

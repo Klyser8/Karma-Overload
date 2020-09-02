@@ -35,7 +35,7 @@ Database:
 Starting Score: 0
 
 #The size that a player's Karma History should be. Lower values results in higher performance.
-Karma History Size: 25
+Karma History Size: 10
 
 #How often players karma gain/loss limits should reset (in seconds). Very low numbers may cause lag.
 Karma Limit Reset Interval: 3600
@@ -49,6 +49,11 @@ Karma Limit Reset Interval: 3600
 #  - Example: Player's alignment limit is 300 Karma. The player's current recent Karma is 290, and they lose 15 from a single source.
 #             The player does not lose any Karma, as it would go over their alignment's limit.
 Karma Soft Cap: true
+
+#Gamemodes which Karma will take effect.
+Enabled GameModes:
+  - SURVIVAL
+  - ADVENTURE
 
 #True: The list below will be worlds where Karma will be enabled
 #False: The list below will be worlds where Karma will be disabled

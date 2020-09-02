@@ -302,7 +302,8 @@ public class ActionListener implements Listener {
     public void onKarmaGain(KarmaGainEvent event) {
         World world = event.getProfile().getPlayer().getWorld();
         Preferences pref = plugin.getPreferences();
-        if ((!pref.isWorldListEnabler() && pref.getWorldList().contains(world) || pref.isWorldListEnabler() && !pref.getWorldList().contains(world)) &&
+        if (((!pref.isWorldListEnabler() && pref.getWorldList().contains(world)) || (pref.isWorldListEnabler() && !pref.getWorldList().contains(world)) ||
+                !pref.getEnabledGameModes().contains(event.getProfile().getPlayer().getGameMode())) &&
                 event.getSource() != KarmaSource.COMMAND && event.getSource() != KarmaSource.VOTING) {
             event.setCancelled(true);
             return;
@@ -319,7 +320,8 @@ public class ActionListener implements Listener {
     public void onKarmaLoss(KarmaLossEvent event) {
         World world = event.getProfile().getPlayer().getWorld();
         Preferences pref = plugin.getPreferences();
-        if ((!pref.isWorldListEnabler() && pref.getWorldList().contains(world) || pref.isWorldListEnabler() && !pref.getWorldList().contains(world)) &&
+        if (((!pref.isWorldListEnabler() && pref.getWorldList().contains(world)) || (pref.isWorldListEnabler() && !pref.getWorldList().contains(world)) ||
+                !pref.getEnabledGameModes().contains(event.getProfile().getPlayer().getGameMode())) &&
         event.getSource() != KarmaSource.COMMAND && event.getSource() != KarmaSource.VOTING) {
             event.setCancelled(true);
             return;

@@ -4,6 +4,7 @@ import com.github.klyser8.karmaoverload.commands.*;
 import com.github.klyser8.karmaoverload.commands.storage.ReloadCommand;
 import com.github.klyser8.karmaoverload.commands.storage.SaveCommand;
 import com.github.klyser8.karmaoverload.karma.*;
+import com.github.klyser8.karmaoverload.karma.votifier.KarmaVoteListener;
 import com.github.klyser8.karmaoverload.karma.worldguard.FlagListener;
 import com.github.klyser8.karmaoverload.karma.worldguard.KarmaFlags;
 import com.github.klyser8.karmaoverload.language.LanguageHandler;
@@ -72,8 +73,9 @@ public final class KarmaOverload extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new StorageListener(this), this);
         Bukkit.getPluginManager().registerEvents(new EffectListener(this), this);
         Bukkit.getPluginManager().registerEvents(new ActionListener(this), this);
-        if (Bukkit.getPluginManager().getPlugin("WorldGuard") != null) Bukkit.getPluginManager().registerEvents(new FlagListener(), this);
         Bukkit.getPluginManager().registerEvents(new LoggingListener(this), this);
+        if (Bukkit.getPluginManager().getPlugin("WorldGuard") != null) Bukkit.getPluginManager().registerEvents(new FlagListener(), this);
+        if (Bukkit.getPluginManager().getPlugin("Votifier") != null) Bukkit.getPluginManager().registerEvents(new KarmaVoteListener(this), this);
         for (Player player : Bukkit.getOnlinePlayers()) {
             profileProvider.createProfile(player);
         }
