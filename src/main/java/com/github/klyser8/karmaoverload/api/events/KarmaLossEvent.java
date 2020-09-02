@@ -6,6 +6,11 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+/**
+ * Stores information about a player's negative change in Karma.
+ *
+ * Cancelling this event will result in no Karma being lost.
+ */
 public class KarmaLossEvent extends Event implements Cancellable {
 
     private boolean cancelled = false;

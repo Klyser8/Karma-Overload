@@ -1,13 +1,19 @@
 package com.github.klyser8.karmaoverload.karma;
 
 import com.github.klyser8.karmaoverload.KarmaOverload;
+import com.github.klyser8.karmaoverload.api.KarmaAction;
 import com.github.klyser8.karmaoverload.api.KarmaWriter;
 import com.github.klyser8.karmaoverload.api.events.KarmaGainEvent;
 import com.github.klyser8.karmaoverload.api.events.KarmaLossEvent;
+import com.github.klyser8.karmaoverload.api.events.KarmaPreActionEvent;
 import com.github.klyser8.karmaoverload.karma.actions.*;
+import com.github.klyser8.karmaoverload.storage.Preferences;
+import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.SoundCategory;
+import org.bukkit.World;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,6 +29,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 
 import static com.github.klyser8.karmaoverload.karma.actions.KarmaActionType.*;
+import static com.github.klyser8.karmaoverload.karma.effects.KarmaEffectType.EXP_MULTIPLIER;
 import static com.github.klyser8.karmaoverload.util.MathUtil.calculateChance;
 
 public class ActionListener implements Listener {
@@ -39,21 +46,26 @@ public class ActionListener implements Listener {
         LivingEntity entity = event.getEntity();
         KarmaProfile profile = plugin.getProfileProvider().getProfile(player);
         Alignment alignment = profile.getAlignment();
-        GenericAction action = null;
+        KarmaActionType actionType = null;
         if (entity instanceof Tameable || entity instanceof AbstractVillager) {
             if (alignment.getKarmaActions().containsKey(FRIENDLY_MOB_KILLING)) {
-                action = (GenericAction) alignment.getKarmaActions().get(FRIENDLY_MOB_KILLING);
+                actionType = FRIENDLY_MOB_KILLING;
             }
         } else if (entity instanceof Animals) {
             if (alignment.getKarmaActions().containsKey(PASSIVE_MOB_KILLING)) {
-                action = (GenericAction) alignment.getKarmaActions().get(PASSIVE_MOB_KILLING);
+                actionType = PASSIVE_MOB_KILLING;
             }
         } else if (entity instanceof Monster){
             if (alignment.getKarmaActions().containsKey(HOSTILE_MOB_KILLING)) {
-                action = (GenericAction) alignment.getKarmaActions().get(HOSTILE_MOB_KILLING);
+                actionType = HOSTILE_MOB_KILLING;
             }
         }
-        if (action == null) return;
+        if (actionType == null) return;
+        GenericAction action = (GenericAction) alignment.getKarmaActions().get(actionType);
+;
+        KarmaPreActionEvent actionEvent = new KarmaPreActionEvent(profile, actionType, action);
+        Bukkit.getPluginManager().callEvent(actionEvent);
+        if (actionEvent.isCancelled()) return;
         if (!calculateChance(action.getChance())) return;
         if (player.hasPermission(action.getPermission())) {
             KarmaWriter.changeKarma(plugin, profile, action.getAmount(), KarmaSource.MOB);
@@ -66,6 +78,9 @@ public class ActionListener implements Listener {
         Player victim = event.getEntity();
         if (victim.getKiller() == null) return;
         Player killer = victim.getKiller();
+        KarmaPreActionEvent actionEvent = new KarmaPreActionEvent(plugin.getProfileProvider().getProfile(killer), PLAYER_KILLING, null);
+        Bukkit.getPluginManager().callEvent(actionEvent);
+        if (actionEvent.isCancelled()) return;
         KarmaProfile victimProfile = plugin.getProfileProvider().getProfile(victim);
         KarmaProfile killerProfile = plugin.getProfileProvider().getProfile(killer);
         KarmaWriter.changeKarma(plugin, killerProfile, victimProfile.getAlignment().getKillPenalty(), KarmaSource.PLAYER);
@@ -74,7 +89,9 @@ public class ActionListener implements Listener {
     @EventHandler
     public void onEntityHitByEntity(EntityDamageByEntityEvent event) {
         if (!(event.getDamager() instanceof Player) && !(event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter() instanceof Player)) return;
-        if (!(event.getEntity() instanceof Player) && !(event.getEntity() instanceof Tameable) && !(event.getEntity() instanceof AbstractVillager)) return;
+        Entity victim = event.getEntity();
+        if (!(victim instanceof Player) && !(victim instanceof Tameable) && !(victim instanceof AbstractVillager)) return;
+        if (Bukkit.getPluginManager().getPlugin("Citizens") != null && victim instanceof NPC) return;
         Player damager;
         if (event.getDamager() instanceof Player) {
             damager = ((Player) event.getDamager());
@@ -84,20 +101,24 @@ public class ActionListener implements Listener {
         }
         if (damager == null) return;
         KarmaProfile profile = plugin.getProfileProvider().getProfile(damager);
-        GenericAction action = null;
+        KarmaActionType type = null;
         KarmaSource source = null;
         SoundCategory category = null;
         if (event.getEntity() instanceof Player && profile.getAlignment().getKarmaActions().containsKey(PLAYER_HITTING)) {
-            action = (GenericAction) profile.getAlignment().getKarmaActions().get(PLAYER_HITTING);
+            type = PLAYER_HITTING;
             source = KarmaSource.PLAYER;
             category = SoundCategory.PLAYERS;
         } else if ((event.getEntity() instanceof Tameable || event.getEntity() instanceof AbstractVillager) &&
                 profile.getAlignment().getKarmaActions().containsKey(FRIENDLY_MOB_HITTING)) {
-            action = (GenericAction) profile.getAlignment().getKarmaActions().get(FRIENDLY_MOB_HITTING);
+            type = FRIENDLY_MOB_HITTING;
             source = KarmaSource.MOB;
             category = SoundCategory.NEUTRAL;
         }
-        if (action == null) return;
+        if (type == null) return;
+        GenericAction action = (GenericAction) profile.getAlignment().getKarmaActions().get(type);
+        KarmaPreActionEvent actionEvent = new KarmaPreActionEvent(profile, type, action);
+        Bukkit.getPluginManager().callEvent(actionEvent);
+        if (actionEvent.isCancelled()) return;
         if (!calculateChance(action.getChance())) return;
         if (!damager.hasPermission(action.getPermission())) return;
         KarmaWriter.changeKarma(plugin, profile, action.getAmount() * event.getFinalDamage(), source);
@@ -112,6 +133,9 @@ public class ActionListener implements Listener {
         KarmaProfile profile = plugin.getProfileProvider().getProfile(player);
         if (!profile.getAlignment().getKarmaActions().containsKey(TRADING)) return;
         GenericAction action = (GenericAction) profile.getAlignment().getKarmaActions().get(TRADING);
+        KarmaPreActionEvent actionEvent = new KarmaPreActionEvent(profile, TRADING, action);
+        Bukkit.getPluginManager().callEvent(actionEvent);
+        if (actionEvent.isCancelled()) return;
         if (!player.hasPermission(action.getPermission())) return;
         if (!calculateChance(action.getChance())) return;
         if ((event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.AIR) || event.getSlot() != 2) return;
@@ -129,6 +153,9 @@ public class ActionListener implements Listener {
             Alignment alignment = profile.getAlignment();
             if (!alignment.getKarmaActions().containsKey(BARTERING)) continue;
             GenericAction action = (GenericAction) alignment.getKarmaActions().get(BARTERING);
+            KarmaPreActionEvent actionEvent = new KarmaPreActionEvent(profile, BARTERING, action);
+            Bukkit.getPluginManager().callEvent(actionEvent);
+            if (actionEvent.isCancelled()) return;
             if (!calculateChance(action.getChance())) return;
             if (!player.hasPermission(action.getPermission())) continue;
             KarmaWriter.changeKarma(plugin, profile, action.getAmount(), KarmaSource.BARTER);
@@ -143,6 +170,9 @@ public class ActionListener implements Listener {
         Alignment alignment = profile.getAlignment();
         if (!alignment.getKarmaActions().containsKey(TAMING)) return;
         GenericAction action = (GenericAction) alignment.getKarmaActions().get(TAMING);
+        KarmaPreActionEvent actionEvent = new KarmaPreActionEvent(profile, TAMING, action);
+        Bukkit.getPluginManager().callEvent(actionEvent);
+        if (actionEvent.isCancelled()) return;
         if (!calculateChance(action.getChance())) return;
         if (!player.hasPermission(action.getPermission())) return;
         KarmaWriter.changeKarma(plugin, profile, action.getAmount(), KarmaSource.TAME);
@@ -158,6 +188,9 @@ public class ActionListener implements Listener {
         Alignment alignment = profile.getAlignment();
         if (!alignment.getKarmaActions().containsKey(FEEDING)) return;
         FeedingAction action = (FeedingAction) alignment.getKarmaActions().get(FEEDING);
+        KarmaPreActionEvent actionEvent = new KarmaPreActionEvent(profile, FEEDING, action);
+        Bukkit.getPluginManager().callEvent(actionEvent);
+        if (actionEvent.isCancelled()) return;
         if (!calculateChance(action.getChance())) return;
         if (!player.hasPermission(action.getPermission())) return;
 
@@ -185,6 +218,9 @@ public class ActionListener implements Listener {
         Material foodType = event.getItem().getType();
         if (!alignment.getKarmaActions().containsKey(EATING)) return;
         GenericMaterialListAction action = (GenericMaterialListAction) alignment.getKarmaActions().get(EATING);
+        KarmaPreActionEvent actionEvent = new KarmaPreActionEvent(profile, EATING, action);
+        Bukkit.getPluginManager().callEvent(actionEvent);
+        if (actionEvent.isCancelled()) return;
         GenericMaterialListAction.KarmaMaterialData food = action.getMaterialsMap().get(foodType);
         if (food == null) return;
         if (!calculateChance(food.getChance())) return;
@@ -224,6 +260,11 @@ public class ActionListener implements Listener {
         Alignment alignment = profile.getAlignment();
         if (!alignment.getKarmaActions().containsKey(MESSAGING)) return;
         MessagingAction action = (MessagingAction) alignment.getKarmaActions().get(MESSAGING);
+        KarmaPreActionEvent actionEvent = new KarmaPreActionEvent(profile, MESSAGING, action);
+        Bukkit.getScheduler().runTask(plugin, () -> Bukkit.getPluginManager().callEvent(actionEvent));
+        System.out.println("CANCEL");
+        if (actionEvent.isCancelled()) return;
+        System.out.println("NEVER!");
         for (String string : action.getMessageMap().keySet()) {
             if (!message.toLowerCase().contains(string.toLowerCase())) continue;
             MessagingAction.MessageData data = action.getMessageMap().get(string);
@@ -243,6 +284,9 @@ public class ActionListener implements Listener {
         Alignment alignment = profile.getAlignment();
         if (!alignment.getKarmaActions().containsKey(ADVANCEMENT)) return;
         AdvancementAction action = (AdvancementAction) alignment.getKarmaActions().get(ADVANCEMENT);
+        KarmaPreActionEvent actionEvent = new KarmaPreActionEvent(profile, ADVANCEMENT, action);
+        Bukkit.getPluginManager().callEvent(actionEvent);
+        if (actionEvent.isCancelled()) return;
         for (String key : action.getAdvancementMap().keySet()) {
             if (!eventKey.equalsIgnoreCase(key)) continue;
             AdvancementAction.AdvancementData data = action.getAdvancementMap().get(key);
@@ -256,6 +300,13 @@ public class ActionListener implements Listener {
 
     @EventHandler
     public void onKarmaGain(KarmaGainEvent event) {
+        World world = event.getProfile().getPlayer().getWorld();
+        Preferences pref = plugin.getPreferences();
+        if ((!pref.isWorldListEnabler() && pref.getWorldList().contains(world) || pref.isWorldListEnabler() && !pref.getWorldList().contains(world)) &&
+                event.getSource() != KarmaSource.COMMAND && event.getSource() != KarmaSource.VOTING) {
+            event.setCancelled(true);
+            return;
+        }
         KarmaProfile profile = event.getProfile();
         List<KarmaProfile.HistoryEntry> history = profile.getHistory();
         if (event.getSource() == KarmaSource.COMMAND || event.getSource() == KarmaSource.VOTING) return;
@@ -265,7 +316,14 @@ public class ActionListener implements Listener {
     }
 
     @EventHandler
-    public void onKarmaGain(KarmaLossEvent event) {
+    public void onKarmaLoss(KarmaLossEvent event) {
+        World world = event.getProfile().getPlayer().getWorld();
+        Preferences pref = plugin.getPreferences();
+        if ((!pref.isWorldListEnabler() && pref.getWorldList().contains(world) || pref.isWorldListEnabler() && !pref.getWorldList().contains(world)) &&
+        event.getSource() != KarmaSource.COMMAND && event.getSource() != KarmaSource.VOTING) {
+            event.setCancelled(true);
+            return;
+        }
         KarmaProfile profile = event.getProfile();
         List<KarmaProfile.HistoryEntry> history = profile.getHistory();
         if (event.getSource() == KarmaSource.COMMAND || event.getSource() == KarmaSource.VOTING) return;
@@ -279,6 +337,9 @@ public class ActionListener implements Listener {
         Alignment alignment = profile.getAlignment();
         if (!alignment.getKarmaActions().containsKey(actionType)) return;
         GenericMaterialListAction action = (GenericMaterialListAction) alignment.getKarmaActions().get(actionType);
+        KarmaPreActionEvent actionEvent = new KarmaPreActionEvent(profile, actionType, action);
+        Bukkit.getPluginManager().callEvent(actionEvent);
+        if (actionEvent.isCancelled()) return;
         GenericMaterialListAction.KarmaMaterialData block = action.getMaterialsMap().get(type);
         if (block == null) return;
         if (!calculateChance(block.getChance())) return;

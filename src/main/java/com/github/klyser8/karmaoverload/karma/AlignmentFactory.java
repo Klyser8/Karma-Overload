@@ -17,12 +17,39 @@ import java.util.*;
 import static com.github.klyser8.karmaoverload.karma.effects.KarmaEffectType.*;
 import static com.github.klyser8.karmaoverload.util.RandomUtil.debugMessage;
 
+/**
+ * Parses and creates the plugin's alignments. These can be found in
+ * the 'alignments' folder, each yaml file inside being an alignment.
+ * This class should mostly be left alone, as creating new instances
+ * of it could break the plugin.
+ */
 public class AlignmentFactory {
 
     private final KarmaOverload plugin;
 
     public AlignmentFactory(KarmaOverload plugin) {
         this.plugin = plugin;
+    }
+
+    /**
+     * Used to parse lines such as "PASSIVE: amount = 1.0; interval = 300", and collect
+     * the values needed to create karma Effects and Actions.
+     *
+     * Static for ease of access.
+     * @param line any string found inside any alignment.yml file
+     * @return a map storing values necessary to the Karma effect/action
+     */
+    public static Map<String, String> parseLine(String line) {
+        line = line.replace(" ", "");
+        line = line.replace("}", "");
+        Map<String, String> effectMap = new HashMap<>();
+        line = line.replace(" ", "");
+        String[] values = line.split(";");
+        for (String value : values) {
+            effectMap.put(value.substring(0, value.indexOf('=')), value.substring(value.indexOf('=') + 1));
+        }
+        if (!effectMap.containsKey("chance")) effectMap.put("chance", "1.0");
+        return effectMap;
     }
 
     public void setup() {
@@ -184,29 +211,16 @@ public class AlignmentFactory {
                     break;
                 case MINERAL_REGEN:
                     karmaEffects.put(MINERAL_REGEN,
-                            new MiningEffect(plugin, section.getStringList("MINERAL_REGEN")));
+                            new MiningEffect(plugin, section.getStringList("MINERAL_REGEN"), true));
                     break;
                 case MINERAL_FAIL:
                     karmaEffects.put(MINERAL_FAIL,
-                            new MiningEffect(plugin, section.getStringList("MINERAL_FAIL")));
+                            new MiningEffect(plugin, section.getStringList("MINERAL_FAIL"), false));
                     break;
             }
         }
 
         return karmaEffects;
-    }
-
-    public static Map<String, String> parseLine(String line) {
-        line = line.replace(" ", "");
-        line = line.replace("}", "");
-        Map<String, String> effectMap = new HashMap<>();
-        line = line.replace(" ", "");
-        String[] values = line.split(";");
-        for (String value : values) {
-            effectMap.put(value.substring(0, value.indexOf('=')), value.substring(value.indexOf('=') + 1));
-        }
-        if (!effectMap.containsKey("chance")) effectMap.put("chance", "1.0");
-        return effectMap;
     }
 
 }

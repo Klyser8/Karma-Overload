@@ -11,6 +11,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Stores all data related to an alignment. New alignments can be
+ * created by creating new instances of this class, but it is strongly
+ * suggested to instead create YAML files for each alignment wanted, as
+ * {@link AlignmentFactory} will create the Alignment objects itself.
+ */
 public class Alignment {
 
     private final int lowThreshold, highThreshold;
@@ -90,10 +96,20 @@ public class Alignment {
         return karmaLimit;
     }
 
+    /**
+     * Returns the sound effect that should play upon reaching
+     * this alignment.
+     * @return {@link Sound}
+     */
     public Sound getAlignSound() {
         return alignSound;
     }
 
+    /**
+     * Returns whether this alignment should play particles
+     * upon being reached.
+     * @return boolean
+     */
     public boolean isParticles() {
         return particles;
     }

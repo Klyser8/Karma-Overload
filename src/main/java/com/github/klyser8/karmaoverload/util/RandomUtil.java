@@ -9,12 +9,12 @@ import org.bukkit.ChatColor;
 public class RandomUtil {
 
     public static void debugMessage(KarmaOverload plugin, Object value, DebugLevel level) {
-        if (plugin.getPreferences().getDebugLevel() != level) return;
+        if (plugin.getPreferences().getDebugLevel().getLevel() < level.getLevel()) return;
         Bukkit.getLogger().info(ChatColor.LIGHT_PURPLE + "[Karma] - " + ChatColor.RESET + value);
     }
 
     public static void errorMessage(KarmaOverload plugin, Object value, DebugLevel level) {
-        if (plugin.getPreferences().getDebugLevel() != level) return;
+        if (plugin.getPreferences().getDebugLevel().getLevel() < level.getLevel()) return;
         Bukkit.getLogger().severe(ChatColor.DARK_PURPLE + "[Karma] - " + ChatColor.RED + value);
     }
 

@@ -64,8 +64,6 @@ Actions:
 Effects:
   KARMA_MULTIPLIER: chance = 1.0; gainMult = 1.0; lossMult = 2.0; perm = karma.effect.karma_mult;
   EXP_MULTIPLIER: chance = 0.8; mult = 1.5; permission = karma.effect.exp_mult; sound = entity.experience_orb.pickup(1.0, 2.0)
-  LIGHTNING: chance = 0.0; permission = karma.effect.lightning; prepareSound = entity.illusioner.prepare_blindness(5.0, 0.75)
-  MOB_ANGER: chance = 0.0; radius = 10; permission = karma.effect.anger; sound = entity.polar_bear.warning(2.0, 1.25)
   LOOT_GENERATION: chance = 0.35; mult = 1.5; permission = karma.effect.loot; sound = block.note_block.bell(1.0, 1.0)
   MINERAL_REGEN:
     - COAL_ORE{chance = 0.3; permission = karma.effect.mineral.regen.coal; appearSound = entity.ender_eye.death(1.0, 2.0)}

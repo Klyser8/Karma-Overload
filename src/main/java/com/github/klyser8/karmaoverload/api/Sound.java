@@ -6,6 +6,10 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
+/**
+ * Utility class, used to create Sound objects which can be
+ * used at any time to play a specific sound.
+ */
 public class Sound {
 
     private final String soundName;

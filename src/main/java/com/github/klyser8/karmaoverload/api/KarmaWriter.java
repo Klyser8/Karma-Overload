@@ -16,7 +16,15 @@ import java.time.Instant;
 
 import static com.github.klyser8.karmaoverload.util.RandomUtil.debugMessage;
 
+/**
+ * Class which holds all necessary methods to update a player's
+ * current alignment and increase/decrease their Karma score.
+ *
+ * All the methods below are static, for ease of access.
+ */
 public class KarmaWriter {
+
+    private KarmaWriter() {}
 
     private static void addKarma(KarmaOverload plugin, KarmaProfile profile, double amount, KarmaSource source) {
         if (amount <= 0) return;
@@ -35,7 +43,6 @@ public class KarmaWriter {
         profile.addHistoryEntry(Date.from(Instant.now()), source, event.getGainedKarma());
         if (source == KarmaSource.COMMAND || source == KarmaSource.VOTING) return;
         plugin.getKarmaLimitMap().put(profile.getPlayer(), recentKarma + event.getGainedKarma());
-        debugMessage(plugin, profile.getPlayer().getName() + "'s recent karma: " + plugin.getKarmaLimitMap().get(profile.getPlayer()) + "/" + profile.getAlignment().getKarmaLimit(), DebugLevel.HIGH);
     }
 
     private static void subtractKarma(KarmaOverload plugin, KarmaProfile profile, double amount, KarmaSource source) {
@@ -55,7 +62,6 @@ public class KarmaWriter {
         profile.addHistoryEntry(Date.from(Instant.now()), source, -event.getLostKarma());
         if (source == KarmaSource.COMMAND || source == KarmaSource.VOTING) return;
         plugin.getKarmaLimitMap().put(profile.getPlayer(), recentKarma + event.getLostKarma());
-        debugMessage(plugin, profile.getPlayer().getName() + "'s recent karma: " + plugin.getKarmaLimitMap().get(profile.getPlayer()) + "/" + profile.getAlignment().getKarmaLimit(), DebugLevel.HIGH);
     }
 
 
@@ -118,7 +124,7 @@ public class KarmaWriter {
      */
     public static void updateAlignment(KarmaOverload plugin, KarmaProfile profile, boolean triggerEvent) {
         for (Alignment alignment : plugin.getAlignments()) {
-            if (!(alignment.getLowThreshold() < profile.getKarma() && profile.getKarma() < alignment.getHighThreshold())) continue;
+            if (!(alignment.getLowThreshold() <= profile.getKarma() && profile.getKarma() <= alignment.getHighThreshold())) continue;
             if (profile.getAlignment() != null && profile.getAlignment().getName().equalsIgnoreCase(alignment.getName())) return;
             if (triggerEvent) {
                 AlignmentChangeEvent event = new AlignmentChangeEvent(profile, profile.getAlignment(), alignment);

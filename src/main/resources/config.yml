@@ -49,3 +49,11 @@ Karma Limit Reset Interval: 3600
 #  - Example: Player's alignment limit is 300 Karma. The player's current recent Karma is 290, and they lose 15 from a single source.
 #             The player does not lose any Karma, as it would go over their alignment's limit.
 Karma Soft Cap: true
+
+#True: The list below will be worlds where Karma will be enabled
+#False: The list below will be worlds where Karma will be disabled
+Enabled World List: true
+Worlds:
+  - world
+  - world_nether
+  - world_the_end

@@ -1,46 +1,35 @@
 package com.github.klyser8.karmaoverload.api.events;
 
+import com.github.klyser8.karmaoverload.api.KarmaEffect;
 import com.github.klyser8.karmaoverload.karma.Alignment;
 import com.github.klyser8.karmaoverload.karma.KarmaProfile;
+import com.github.klyser8.karmaoverload.karma.effects.KarmaEffectType;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 /**
- * Stores information about a player's alignment change.
+ * Called right before a {@link KarmaEffect} takes place.
  *
- * Note:
- * Since this event is called before the alignment changes, getting the
- * player's alignment with {@link KarmaProfile#getAlignment()} returns
- * the same value as {@link #oldAlignment}
- *
- * Cancelling this event will prevent the player from changing alignment.
+ * Cancelling this event will prevent the Effect from happening.
  */
-public class AlignmentChangeEvent extends Event implements Cancellable {
+public class KarmaPreEffectEvent extends Event implements Cancellable {
 
     private boolean cancelled = false;
     private final KarmaProfile profile;
-    private final Alignment oldAlignment;
-    private final Alignment newAlignment;
+    private final KarmaEffectType type;
+    private final KarmaEffect effect;
 
     private static final HandlerList HANDLERS = new HandlerList();
 
-    public AlignmentChangeEvent(KarmaProfile profile, Alignment oldAlignment, Alignment newAlignment) {
+    public KarmaPreEffectEvent(KarmaProfile profile, KarmaEffectType type, KarmaEffect effect) {
         this.profile = profile;
-        this.oldAlignment = oldAlignment;
-        this.newAlignment = newAlignment;
+        this.type = type;
+        this.effect = effect;
     }
 
     public KarmaProfile getProfile() {
         return profile;
-    }
-
-    public Alignment getOldAlignment() {
-        return oldAlignment;
-    }
-
-    public Alignment getNewAlignment() {
-        return newAlignment;
     }
 
     @Override
@@ -61,5 +50,12 @@ public class AlignmentChangeEvent extends Event implements Cancellable {
     public static HandlerList getHandlerList() {
         return HANDLERS;
     }
-}
 
+    public KarmaEffectType getType() {
+        return type;
+    }
+
+    public KarmaEffect getEffect() {
+        return effect;
+    }
+}

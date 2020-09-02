@@ -37,6 +37,7 @@ public class ListCommand extends CommandBase {
         Map<KarmaProfile, Double> profileMap = new HashMap<>();
         LanguageHandler lang = plugin.getLanguageHandler();
         for (Player player : Bukkit.getOnlinePlayers()) {
+            if (sender instanceof Player && ((Player) sender).canSee(player))
             profileMap.put(plugin.getProfileProvider().getProfile(player), plugin.getProfileProvider().getProfile(player).getKarma());
         }
         Map<KarmaProfile, Double> reverseSortedMap = new LinkedHashMap<>();

@@ -2,8 +2,12 @@ package com.github.klyser8.karmaoverload.storage;
 
 import com.github.klyser8.karmaoverload.KarmaOverload;
 import com.github.klyser8.karmaoverload.karma.Alignment;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Preferences {
@@ -29,9 +33,13 @@ public class Preferences {
 
     private boolean softCap = true;
 
+    private boolean worldListEnabler;
+    private final List<World> worldList;
+
     private final KarmaOverload plugin;
     public Preferences(KarmaOverload plugin) {
         this.plugin = plugin;
+        this.worldList = new ArrayList<>();
     }
 
     public void loadPreferences() {
@@ -60,6 +68,10 @@ public class Preferences {
         for (Alignment alignment : plugin.getAlignments()) {
             if (alignment.getLowThreshold() < lowLimit) lowLimit = alignment.getLowThreshold();
             if (alignment.getHighThreshold() > highLimit) highLimit = alignment.getHighThreshold();
+        }
+        worldListEnabler = config.getBoolean("Enabled World List");
+        for (String worldName : config.getStringList("Worlds")) {
+            worldList.add(Bukkit.getWorld(worldName));
         }
         plugin.getLanguageHandler().setup();
     }
@@ -130,5 +142,13 @@ public class Preferences {
 
     public boolean isCommandSounds() {
         return commandSounds;
+    }
+
+    public boolean isWorldListEnabler() {
+        return worldListEnabler;
+    }
+
+    public List<World> getWorldList() {
+        return worldList;
     }
 }

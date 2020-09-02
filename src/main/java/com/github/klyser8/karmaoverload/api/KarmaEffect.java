@@ -2,6 +2,11 @@ package com.github.klyser8.karmaoverload.api;
 
 import com.github.klyser8.karmaoverload.KarmaOverload;
 
+/**
+ * Parent class of all Karma Effects. If any new Karma Effect is
+ * created, it should extend this class in order to be recognized
+ * by the plugin.
+ */
 public abstract class KarmaEffect {
 
     protected final String permission;

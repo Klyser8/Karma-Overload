@@ -12,7 +12,7 @@ public class MiningEffect extends KarmaEffect {
 
     private Map<Material, KarmaMineral> mineralMap;
 
-    public MiningEffect(final KarmaOverload plugin, List<String> materialCodes) {
+    public MiningEffect(final KarmaOverload plugin, List<String> materialCodes, boolean doubleSound) {
         super(plugin, 0, null); //0, 0, null since these will be provided by the KarmaMineral objects.
         this.plugin = plugin;
         mineralMap = new HashMap<>();
@@ -20,9 +20,17 @@ public class MiningEffect extends KarmaEffect {
         for (String matCode : materialCodes) {
             String[] subString = matCode.split("\\{");
             Material material = Material.valueOf(subString[0]);
-            Map<String, String> effectData = AlignmentFactory.parseLine(subString[1]);
-            KarmaMineral karmaMineral = new KarmaMineral(Double.parseDouble(effectData.get("chance")),
-                    Sound.fromString(effectData.get("sound")), null, effectData.get("permission"));
+            Map<String, String> effectData;
+            KarmaMineral karmaMineral;
+            if (doubleSound) {
+                effectData = AlignmentFactory.parseLine(subString[1]);
+                karmaMineral = new KarmaMineral(Double.parseDouble(effectData.get("chance")),
+                        Sound.fromString(effectData.get("breakSound")), Sound.fromString(effectData.get("appearSound")), effectData.get("permission"));
+            } else {
+                effectData = AlignmentFactory.parseLine(subString[1]);
+                karmaMineral = new KarmaMineral(Double.parseDouble(effectData.get("chance")),
+                        Sound.fromString(effectData.get("sound")), null, effectData.get("permission"));
+            }
             mineralMap.put(material, karmaMineral);
         }
         mineralMap = Collections.unmodifiableMap(mineralMap);
