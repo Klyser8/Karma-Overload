@@ -60,7 +60,7 @@ public class ListCommand extends CommandBase {
         for (String row : rows) {
             sender.sendMessage(color(row));
         }
-        if (sender instanceof Player) sound.play(((Player) sender).getLocation(), SoundCategory.MASTER, (Player) sender);
+        if (sender instanceof Player && plugin.getPreferences().isCommandSoundsEnabled()) sound.play(((Player) sender).getLocation(), SoundCategory.MASTER, (Player) sender);
     }
 
 /*    @SubCommand("list")

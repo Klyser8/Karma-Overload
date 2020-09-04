@@ -12,6 +12,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -51,6 +52,9 @@ public class ProfileWriter {
 
     public void saveProfileGson(KarmaProfile profile) {
         Player player = profile.getPlayer();
+
+        File playerDir = new File(plugin.getDataFolder(), "players");
+        if (!playerDir.exists()) playerDir.mkdir();
 
         File playerFile = new File(plugin.getDataFolder() + File.separator + "players", player.getUniqueId().toString() + ".json");
         if (!playerFile.exists()) {

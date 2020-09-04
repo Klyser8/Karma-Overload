@@ -4,6 +4,7 @@ import com.github.klyser8.karmaoverload.KarmaOverload;
 import com.github.klyser8.karmaoverload.karma.Alignment;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -24,8 +25,11 @@ public class Preferences {
     private boolean commandSounds = true;
 
     private int storageType = 1;
-    private int saveInterval = 120 * 20;
-    private int karmaLimitResetInterval = 3600 * 20;
+    private int saveInterval = 120;
+    private int karmaLimitResetInterval = 3600;
+
+    private Particle karmaGainParticle = null;
+    private Particle karmaLossParticle = null;
 
     private int historySize = 25;
     private int startingScore = 0;
@@ -64,6 +68,14 @@ public class Preferences {
 
         saveInterval = config.getInt("Autosave Interval") * 20;
         karmaLimitResetInterval = config.getInt("Karma Limit Reset Interval") * 20;
+
+
+        if (config.getString("Karma Gain Particle") != null) {
+            karmaGainParticle = Particle.valueOf(config.getString("Karma Gain Particle"));
+        }
+        if (config.getString("Karma Loss Particle") != null) {
+            karmaLossParticle = Particle.valueOf(config.getString("Karma Loss Particle"));
+        }
 
         historySize = config.getInt("Karma History Size");
         startingScore = config.getInt("Starting Score");
@@ -147,7 +159,7 @@ public class Preferences {
         this.softCap = softCap;
     }
 
-    public boolean isCommandSounds() {
+    public boolean isCommandSoundsEnabled() {
         return commandSounds;
     }
 
@@ -161,5 +173,13 @@ public class Preferences {
 
     public List<GameMode> getEnabledGameModes() {
         return enabledGameModes;
+    }
+
+    public Particle getKarmaGainParticle() {
+        return karmaGainParticle;
+    }
+
+    public Particle getKarmaLossParticle() {
+        return karmaLossParticle;
     }
 }

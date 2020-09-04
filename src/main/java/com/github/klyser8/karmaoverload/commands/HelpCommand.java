@@ -73,7 +73,7 @@ public class HelpCommand extends CommandBase {
         if (sender.hasPermission("karma.command.list"))
             sender.sendMessage(lang.getMessage(Message.HELP_HISTORY)
                     .replace("<HISTORY_COMMAND>", color("&d/Karma history &5&o[" + lang.getMessage(Message.PLAYER).toLowerCase() + "]")));
-        if (sender instanceof Player) sound.play(((Player) sender).getLocation(), SoundCategory.MASTER, (Player) sender);
+        if (sender instanceof Player && plugin.getPreferences().isCommandSoundsEnabled()) sound.play(((Player) sender).getLocation(), SoundCategory.MASTER, (Player) sender);
     }
 
 }

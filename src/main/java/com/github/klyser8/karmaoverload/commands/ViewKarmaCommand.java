@@ -58,7 +58,7 @@ public class ViewKarmaCommand extends CommandBase {
                     .replace("<PLAYER>", targetName)
                     .replace("<ALIGNMENT>", profile.getAlignment().getColor() + profile.getAlignment().getName()));
         }
-        if (sender instanceof Player) sound.play(((Player) sender).getLocation(), SoundCategory.MASTER, (Player) sender);
+        if (sender instanceof Player && plugin.getPreferences().isCommandSoundsEnabled()) sound.play(((Player) sender).getLocation(), SoundCategory.MASTER, (Player) sender);
     }
 
 }

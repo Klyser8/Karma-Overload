@@ -53,7 +53,7 @@ public class SetKarmaCommand extends CommandBase {
                     .replace("<NUMBER>", String.valueOf(amount)));
         }
         KarmaWriter.setKarma(plugin, profile, amount, KarmaSource.COMMAND);
-        if (sender instanceof Player) sound.play(((Player) sender).getLocation(), SoundCategory.MASTER, (Player) sender);
+        if (sender instanceof Player && plugin.getPreferences().isCommandSoundsEnabled()) sound.play(((Player) sender).getLocation(), SoundCategory.MASTER, (Player) sender);
         if (reason == null) return;
         reason = reason.replaceAll("_", " ");
         target.sendMessage(color(lang.getMessage(Message.SCORE_SET_REASON).replace("<AMOUNT>", amount.toString()).replace("<REASON>", reason)));

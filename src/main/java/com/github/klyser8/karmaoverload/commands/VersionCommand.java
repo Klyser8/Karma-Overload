@@ -25,7 +25,7 @@ public class VersionCommand extends CommandBase {
     @Permission("karma.command.version")
     public void versionCommand(CommandSender sender) {
         sender.sendMessage(plugin.getLanguageHandler().getMessage(Message.VERSION).replace("<VERSION>", plugin.getDescription().getVersion()));
-        if (sender instanceof Player) sound.play(((Player) sender).getLocation(), SoundCategory.MASTER, (Player) sender);
+        if (sender instanceof Player && plugin.getPreferences().isCommandSoundsEnabled()) sound.play(((Player) sender).getLocation(), SoundCategory.MASTER, (Player) sender);
     }
 
 }

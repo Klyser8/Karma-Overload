@@ -199,15 +199,20 @@ public class EffectListener implements Listener {
         Player player = profile.getPlayer();
         if (event.getSource() == KarmaSource.COMMAND || event.getSource() == KarmaSource.VOTING) return;
         Alignment alignment = profile.getAlignment();
-        if (!alignment.getKarmaEffects().containsKey(KARMA_MULTIPLIER)) return;
-        KarmaMultiplierEffect effect = (KarmaMultiplierEffect) alignment.getKarmaEffects().get(KarmaEffectType.KARMA_MULTIPLIER);
-        KarmaPreEffectEvent effectEvent = new KarmaPreEffectEvent(profile, KARMA_MULTIPLIER, effect);
-        Bukkit.getPluginManager().callEvent(effectEvent);
-        if (effectEvent.isCancelled()) return;
-        if (effect.getPermission() != null && !player.hasPermission(effect.getPermission())) return;
-        if (!calculateChance(effect.getChance())) return;
-        event.setGainedKarma(event.getGainedKarma() * effect.getGainMultiplier());
-        if (effect.getGainSound() != null) effect.getGainSound().play(player.getLocation(), SoundCategory.NEUTRAL, player);
+        if (alignment.getKarmaEffects().containsKey(KARMA_MULTIPLIER)) {//Ugly ugly ugly arrow code, gotta fix this some time
+            KarmaMultiplierEffect effect = (KarmaMultiplierEffect) alignment.getKarmaEffects().get(KarmaEffectType.KARMA_MULTIPLIER);
+            KarmaPreEffectEvent effectEvent = new KarmaPreEffectEvent(profile, KARMA_MULTIPLIER, effect);
+            Bukkit.getPluginManager().callEvent(effectEvent);
+            if (!effectEvent.isCancelled()) {
+                if (effect.getPermission() == null || player.hasPermission(effect.getPermission())) {
+                    if (calculateChance(effect.getChance())) {
+                        event.setGainedKarma(event.getGainedKarma() * effect.getGainMultiplier());
+                        if (effect.getLossSound() != null) effect.getGainSound().play(player.getLocation(), SoundCategory.NEUTRAL, player);
+                    }
+                }
+            }
+        }
+        playKarmaParticles(profile, (int) Math.round(event.getGainedKarma() * 2), plugin.getPreferences().getKarmaGainParticle());
     }
 
     @EventHandler
@@ -216,15 +221,21 @@ public class EffectListener implements Listener {
         Player player = profile.getPlayer();
         if (event.getSource() == KarmaSource.COMMAND || event.getSource() == KarmaSource.VOTING) return;
         Alignment alignment = profile.getAlignment();
-        if (!alignment.getKarmaEffects().containsKey(KARMA_MULTIPLIER)) return;
-        KarmaMultiplierEffect effect = (KarmaMultiplierEffect) alignment.getKarmaEffects().get(KarmaEffectType.KARMA_MULTIPLIER);
-        KarmaPreEffectEvent effectEvent = new KarmaPreEffectEvent(profile, KARMA_MULTIPLIER, effect);
-        Bukkit.getPluginManager().callEvent(effectEvent);
-        if (effectEvent.isCancelled()) return;
-        if (effect.getPermission() != null && !player.hasPermission(effect.getPermission())) return;
-        if (!calculateChance(effect.getChance())) return;
-        event.setLostKarma(event.getLostKarma() * effect.getLossMultiplier());
-        if (effect.getLossSound() != null) effect.getLossSound().play(player.getLocation(), SoundCategory.NEUTRAL, player);
+        if (alignment.getKarmaEffects().containsKey(KARMA_MULTIPLIER)) {//Ugly ugly ugly arrow code, gotta fix this some time
+            KarmaMultiplierEffect effect = (KarmaMultiplierEffect) alignment.getKarmaEffects().get(KarmaEffectType.KARMA_MULTIPLIER);
+            KarmaPreEffectEvent effectEvent = new KarmaPreEffectEvent(profile, KARMA_MULTIPLIER, effect);
+            Bukkit.getPluginManager().callEvent(effectEvent);
+            if (!effectEvent.isCancelled()) {
+                if (effect.getPermission() == null || player.hasPermission(effect.getPermission())) {
+                    if (calculateChance(effect.getChance())) {
+                        event.setLostKarma(event.getLostKarma() * effect.getLossMultiplier());
+                        if (effect.getLossSound() != null)
+                            effect.getLossSound().play(player.getLocation(), SoundCategory.NEUTRAL, player);
+                    }
+                }
+            }
+        }
+        playKarmaParticles(profile, (int) Math.round(event.getLostKarma() * 2), plugin.getPreferences().getKarmaLossParticle());
     }
 
     @EventHandler
@@ -246,6 +257,14 @@ public class EffectListener implements Listener {
         if (!pref.isWorldListEnabler() && pref.getWorldList().contains(world) || pref.isWorldListEnabler() && !pref.getWorldList().contains(world)) {
             event.setCancelled(true);
         }
+    }
+
+    private void playKarmaParticles(KarmaProfile profile, int particleAmount, Particle particleType) {
+        if (particleType == null) return;
+        if (particleAmount > 100) particleAmount = 100;
+        Player player = profile.getPlayer();
+        World world = player.getWorld();
+        world.spawnParticle(particleType, player.getLocation().add(0, 1, 0), particleAmount, 0.25, 0.5, 0.25,0.025);
     }
 
     private void createHelix(KarmaProfile profile, Alignment alignment) {

@@ -6,8 +6,11 @@ import com.github.klyser8.karmaoverload.api.KarmaWriter;
 import com.github.klyser8.karmaoverload.api.events.KarmaGainEvent;
 import com.github.klyser8.karmaoverload.api.events.KarmaLossEvent;
 import com.github.klyser8.karmaoverload.api.events.KarmaPreActionEvent;
+import com.github.klyser8.karmaoverload.api.events.KarmaPreEffectEvent;
 import com.github.klyser8.karmaoverload.karma.actions.*;
+import com.github.klyser8.karmaoverload.storage.DebugLevel;
 import com.github.klyser8.karmaoverload.storage.Preferences;
+import com.github.klyser8.karmaoverload.util.RandomUtil;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Bukkit;
@@ -281,6 +284,11 @@ public class ActionListener implements Listener {
         String eventKey = event.getAdvancement().getKey().toString();
         Player player = event.getPlayer();
         KarmaProfile profile = plugin.getProfileProvider().getProfile(player);
+        if (profile == null) {
+            RandomUtil.errorMessage(plugin, player.getName() + " has not gained/lost Karma for already completed advancements. This is a one time error, and is here" +
+                    " just for logging reasons.", DebugLevel.LOW);
+            return;
+        }
         Alignment alignment = profile.getAlignment();
         if (!alignment.getKarmaActions().containsKey(ADVANCEMENT)) return;
         AdvancementAction action = (AdvancementAction) alignment.getKarmaActions().get(ADVANCEMENT);
@@ -300,14 +308,6 @@ public class ActionListener implements Listener {
 
     @EventHandler
     public void onKarmaGain(KarmaGainEvent event) {
-        World world = event.getProfile().getPlayer().getWorld();
-        Preferences pref = plugin.getPreferences();
-        if (((!pref.isWorldListEnabler() && pref.getWorldList().contains(world)) || (pref.isWorldListEnabler() && !pref.getWorldList().contains(world)) ||
-                !pref.getEnabledGameModes().contains(event.getProfile().getPlayer().getGameMode())) &&
-                event.getSource() != KarmaSource.COMMAND && event.getSource() != KarmaSource.VOTING) {
-            event.setCancelled(true);
-            return;
-        }
         KarmaProfile profile = event.getProfile();
         List<KarmaProfile.HistoryEntry> history = profile.getHistory();
         if (event.getSource() == KarmaSource.COMMAND || event.getSource() == KarmaSource.VOTING) return;
@@ -318,20 +318,21 @@ public class ActionListener implements Listener {
 
     @EventHandler
     public void onKarmaLoss(KarmaLossEvent event) {
-        World world = event.getProfile().getPlayer().getWorld();
-        Preferences pref = plugin.getPreferences();
-        if (((!pref.isWorldListEnabler() && pref.getWorldList().contains(world)) || (pref.isWorldListEnabler() && !pref.getWorldList().contains(world)) ||
-                !pref.getEnabledGameModes().contains(event.getProfile().getPlayer().getGameMode())) &&
-        event.getSource() != KarmaSource.COMMAND && event.getSource() != KarmaSource.VOTING) {
-            event.setCancelled(true);
-            return;
-        }
         KarmaProfile profile = event.getProfile();
         List<KarmaProfile.HistoryEntry> history = profile.getHistory();
         if (event.getSource() == KarmaSource.COMMAND || event.getSource() == KarmaSource.VOTING) return;
         if (history.size() <= 1) return;
         if (history.get(history.size() - 1).getSource() != event.getSource() || history.get(history.size() - 2).getSource() != event.getSource()) return;
         event.setLostKarma(event.getLostKarma() * event.getProfile().getAlignment().getLossRepeatMultiplier());
+    }
+
+    @EventHandler
+    public void onPreEffect(KarmaPreActionEvent event) {
+        World world = event.getProfile().getPlayer().getWorld();
+        Preferences pref = plugin.getPreferences();
+        if (!pref.isWorldListEnabler() && pref.getWorldList().contains(world) || pref.isWorldListEnabler() && !pref.getWorldList().contains(world)) {
+            event.setCancelled(true);
+        }
     }
 
     private void handleBlockEvent(Player player, Material type, KarmaActionType actionType) {

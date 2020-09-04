@@ -42,7 +42,7 @@ public class ResetKarmaCommand extends CommandBase {
         KarmaProfile profile = plugin.getProfileProvider().getProfile(target);
         sender.sendMessage(lang.getMessage(Message.SCORE_RESET_SUCCESSFULLY).replace("<PLAYER>", player));
         KarmaWriter.changeKarma(plugin, profile, plugin.getPreferences().getStartingScore() - profile.getKarma(), KarmaSource.COMMAND);
-        if (sender instanceof Player) sound.play(((Player) sender).getLocation(), SoundCategory.MASTER, (Player) sender);
+        if (sender instanceof Player && plugin.getPreferences().isCommandSoundsEnabled()) sound.play(((Player) sender).getLocation(), SoundCategory.MASTER, (Player) sender);
         if (reason == null) return;
         reason = reason.replaceAll("_", " ");
         target.sendMessage(color(lang.getMessage(Message.SCORE_RESET_REASON).replace("<REASON>", reason)));
