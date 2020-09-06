@@ -9,6 +9,7 @@ import com.github.klyser8.karmaoverload.karma.actions.KarmaActionType;
 import com.github.klyser8.karmaoverload.karma.actions.PassiveKarmaAction;
 import com.google.gson.Gson;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.File;
@@ -38,44 +39,46 @@ public class ProfileProvider {
     public void createProfile(Player player) {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> {
             File playerFile = new File(plugin.getDataFolder() + File.separator + "players", player.getUniqueId().toString() + ".json");
+            File oldPlayerYaml = new File(plugin.getDataFolder() + File.separator + "players", player.getUniqueId().toString() + ".plr");
             KarmaProfile profile = new KarmaProfile(plugin, player);
-            if (plugin.getPreferences().getStorageType() == 1) {
-                if (playerFile.exists()) {
-                    Gson gson = new Gson();
-                    try {
-                        DeserializedKarmaProfile deserializedProfile = gson.fromJson(new FileReader(playerFile), DeserializedKarmaProfile.class);
-                        double karma = deserializedProfile.getKarma();
-                        if (deserializedProfile.getKarma() > plugin.getPreferences().getHighLimit()) karma = plugin.getPreferences().getHighLimit();
-                        else if (deserializedProfile.getKarma() < plugin.getPreferences().getLowLimit()) karma = plugin.getPreferences().getLowLimit();
-                        profile.setKarma(karma);
-                        for (KarmaProfile.HistoryEntry entry : deserializedProfile.getHistory()) {
-                            profile.addHistoryEntry(entry.getDate(), entry.getSource(), entry.getAmount());
-                        }
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                }
+            if (oldPlayerYaml.exists()) { //Converts .plr data (from Karma 2.2.9) to .json. Will be removed in the future
+                YamlConfiguration yaml = YamlConfiguration.loadConfiguration(oldPlayerYaml);
+                profile.setKarma(adjustKarma(yaml.getDouble("KarmaScore")));
+                debugMessage(plugin, player.getName() + "'s data converted from .plr to .json!", DebugLevel.LOW);
+                oldPlayerYaml.delete();
             } else {
-                String sqlQuery = "SELECT Score FROM KarmaTable WHERE UUID ='" + player.getUniqueId().toString() + "';";
-                String historySQLQuery = "SELECT * FROM KarmaHistory WHERE UUID = '" + player.getUniqueId().toString() + "';";
-                try {
-                    PreparedStatement statement = plugin.getConnection().prepareStatement(sqlQuery);
-                    ResultSet resultSet = statement.executeQuery();
-                    if (resultSet.next()) {
-                        double karma = resultSet.getDouble("Score");
-                        if (karma > plugin.getPreferences().getHighLimit()) karma = plugin.getPreferences().getHighLimit();
-                        else if (karma < plugin.getPreferences().getLowLimit()) karma = plugin.getPreferences().getLowLimit();
-                        profile.setKarma(karma);
+                if (plugin.getPreferences().getStorageType() == 1) {
+                    if (playerFile.exists()) {
+                        Gson gson = new Gson();
+                        try {
+                            DeserializedKarmaProfile deserializedProfile = gson.fromJson(new FileReader(playerFile), DeserializedKarmaProfile.class);
+                            profile.setKarma(adjustKarma(deserializedProfile.getKarma()));
+                            for (KarmaProfile.HistoryEntry entry : deserializedProfile.getHistory()) {
+                                profile.addHistoryEntry(entry.getDate(), entry.getSource(), entry.getAmount());
+                            }
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
                     }
+                } else {
+                    String sqlQuery = "SELECT Score FROM KarmaTable WHERE UUID ='" + player.getUniqueId().toString() + "';";
+                    String historySQLQuery = "SELECT * FROM KarmaHistory WHERE UUID = '" + player.getUniqueId().toString() + "';";
+                    try {
+                        PreparedStatement statement = plugin.getConnection().prepareStatement(sqlQuery);
+                        ResultSet resultSet = statement.executeQuery();
+                        if (resultSet.next()) {
+                            profile.setKarma(adjustKarma(resultSet.getDouble("Score")));
+                        }
 
-                    statement = plugin.getConnection().prepareStatement(historySQLQuery);
-                    resultSet = statement.executeQuery();
-                    while (resultSet.next()) {
-                        profile.addHistoryEntry(resultSet.getTimestamp("EventTime"),
-                                KarmaSource.valueOf(resultSet.getString("Source")), resultSet.getDouble("Change"));
+                        statement = plugin.getConnection().prepareStatement(historySQLQuery);
+                        resultSet = statement.executeQuery();
+                        while (resultSet.next()) {
+                            profile.addHistoryEntry(resultSet.getTimestamp("EventTime"),
+                                    KarmaSource.valueOf(resultSet.getString("Source")), resultSet.getDouble("Change"));
+                        }
+                    } catch (SQLException throwable) {
+                        throwable.printStackTrace();
                     }
-                } catch (SQLException throwable) {
-                    throwable.printStackTrace();
                 }
             }
             KarmaWriter.updateAlignment(plugin, profile, false);
@@ -101,4 +104,12 @@ public class ProfileProvider {
         profiles.remove(player);
     }
 
+
+    private double adjustKarma(double karma) {
+        if (karma > plugin.getPreferences().getHighLimit())
+            karma = plugin.getPreferences().getHighLimit();
+        else if (karma < plugin.getPreferences().getLowLimit())
+            karma = plugin.getPreferences().getLowLimit();
+        return karma;
+    }
 }
