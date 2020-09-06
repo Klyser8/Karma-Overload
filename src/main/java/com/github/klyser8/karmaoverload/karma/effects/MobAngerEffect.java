@@ -29,7 +29,10 @@ public class MobAngerEffect extends KarmaEffect {
         } else if ((isVersion("1.15") || isVersion("1.16")) && entity instanceof Bee) {
             Bee bee = (Bee) entity;
             if (bee.getAnger() == 0 && !soundNull) sound.play(bee.getEyeLocation(), SoundCategory.HOSTILE);
-            bee.setAnger(bee.getAnger() + 1);
+            int anger;
+            if (isVersion("1.15")) anger = 600;
+            else anger = 1;
+            bee.setAnger(bee.getAnger() + anger);
             bee.setTarget(target);
         } else if (entity instanceof Wolf) {
             Wolf wolf = (Wolf) entity;

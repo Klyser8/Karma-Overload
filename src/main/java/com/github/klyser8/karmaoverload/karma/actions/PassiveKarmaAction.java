@@ -30,6 +30,7 @@ public class PassiveKarmaAction extends KarmaAction {
     }
 
     public void stopRunnable() {
+        if (runnable == null) return;
         runnable.cancel();
     }
 

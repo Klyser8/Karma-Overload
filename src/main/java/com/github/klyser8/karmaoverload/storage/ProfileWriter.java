@@ -17,6 +17,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 
 import static com.github.klyser8.karmaoverload.util.RandomUtil.debugMessage;
+import static com.github.klyser8.karmaoverload.util.RandomUtil.errorMessage;
 
 public class ProfileWriter {
 
@@ -50,6 +51,10 @@ public class ProfileWriter {
     }*/
 
     public void saveProfileGson(KarmaProfile profile) {
+        if (profile == null) {
+            errorMessage(plugin, "A player's Karma Profile was null. The server should immediately be restarted, in order to prevent data loss", DebugLevel.NONE);
+            return;
+        }
         Player player = profile.getPlayer();
 
         File playerDir = new File(plugin.getDataFolder(), "players");
@@ -78,6 +83,10 @@ public class ProfileWriter {
     }
 
     public void saveProfileDB(KarmaProfile profile) {
+        if (profile == null) {
+            errorMessage(plugin, "A player's Karma Profile was null. The server should immediately be restarted, in order to prevent data loss", DebugLevel.NONE);
+            return;
+        }
         Bukkit.getScheduler().runTaskAsynchronously(plugin, ()-> {
             String uuid = profile.getPlayer().getUniqueId().toString();
 
