@@ -1,7 +1,6 @@
 package com.github.klyser8.karmaoverload.karma;
 
-import com.github.klyser8.karmaoverload.KarmaOverload;
-import com.github.klyser8.karmaoverload.api.KarmaAction;
+import com.github.klyser8.karmaoverload.Karma;
 import com.github.klyser8.karmaoverload.api.KarmaWriter;
 import com.github.klyser8.karmaoverload.api.events.KarmaGainEvent;
 import com.github.klyser8.karmaoverload.api.events.KarmaLossEvent;
@@ -11,7 +10,6 @@ import com.github.klyser8.karmaoverload.karma.actions.*;
 import com.github.klyser8.karmaoverload.storage.DebugLevel;
 import com.github.klyser8.karmaoverload.storage.Preferences;
 import com.github.klyser8.karmaoverload.util.RandomUtil;
-import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -32,13 +30,13 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 
 import static com.github.klyser8.karmaoverload.karma.actions.KarmaActionType.*;
-import static com.github.klyser8.karmaoverload.karma.effects.KarmaEffectType.EXP_MULTIPLIER;
 import static com.github.klyser8.karmaoverload.util.MathUtil.calculateChance;
+import static com.github.klyser8.karmaoverload.util.RandomUtil.isVersion;
 
 public class ActionListener implements Listener {
 
-    private final KarmaOverload plugin;
-    public ActionListener(KarmaOverload plugin) {
+    private final Karma plugin;
+    public ActionListener(Karma plugin) {
         this.plugin = plugin;
     }
 
@@ -50,7 +48,8 @@ public class ActionListener implements Listener {
         KarmaProfile profile = plugin.getProfileProvider().getProfile(player);
         Alignment alignment = profile.getAlignment();
         KarmaActionType actionType = null;
-        if (entity instanceof Tameable || entity instanceof AbstractVillager) {
+        if (entity instanceof Tameable || (isVersion("1.13") && entity.getType() == EntityType.VILLAGER) ||
+                (!isVersion("1.13") && entity instanceof AbstractVillager)) {
             if (alignment.getKarmaActions().containsKey(FRIENDLY_MOB_KILLING)) {
                 actionType = FRIENDLY_MOB_KILLING;
             }
@@ -93,7 +92,8 @@ public class ActionListener implements Listener {
     public void onEntityHitByEntity(EntityDamageByEntityEvent event) {
         if (!(event.getDamager() instanceof Player) && !(event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter() instanceof Player)) return;
         Entity victim = event.getEntity();
-        if (!(victim instanceof Player) && !(victim instanceof Tameable) && !(victim instanceof AbstractVillager)) return;
+        if (!(victim instanceof Player) && !(victim instanceof Tameable) && victim.getType() != EntityType.VILLAGER &&
+                (!isVersion("1.13") && !(victim instanceof AbstractVillager))) return; //Checks if victim is a player, tameable, a villager or instance of abstract villager
         if (Bukkit.getPluginManager().getPlugin("Citizens") != null && victim instanceof NPC) return;
         Player damager;
         if (event.getDamager() instanceof Player) {
@@ -107,12 +107,13 @@ public class ActionListener implements Listener {
         KarmaActionType type = null;
         KarmaSource source = null;
         SoundCategory category = null;
-        if (event.getEntity() instanceof Player && profile.getAlignment().getKarmaActions().containsKey(PLAYER_HITTING)) {
+        if (victim instanceof Player && profile.getAlignment().getKarmaActions().containsKey(PLAYER_HITTING)) {
             type = PLAYER_HITTING;
             source = KarmaSource.PLAYER;
             category = SoundCategory.PLAYERS;
-        } else if ((event.getEntity() instanceof Tameable || event.getEntity() instanceof AbstractVillager) &&
-                profile.getAlignment().getKarmaActions().containsKey(FRIENDLY_MOB_HITTING)) {
+        } else if ((((isVersion("1.13") && victim.getType() == EntityType.VILLAGER) || victim instanceof Tameable ||
+                ((!isVersion("1.13") && victim instanceof AbstractVillager))) &&
+                profile.getAlignment().getKarmaActions().containsKey(FRIENDLY_MOB_HITTING))) { //If version is 1.13, checks for the Villager entity type. Otherwise it checks for instanceof abstract villager
             type = FRIENDLY_MOB_HITTING;
             source = KarmaSource.MOB;
             category = SoundCategory.NEUTRAL;
@@ -148,6 +149,7 @@ public class ActionListener implements Listener {
 
     @EventHandler
     public void onPiglinTrade(EntityDropItemEvent event) {
+        if (!isVersion("1.16")) return;
         if (!(event.getEntity() instanceof Piglin)) return;
         for (Entity entity : event.getEntity().getNearbyEntities(10, 10, 10)) {
             if (!(entity instanceof Player)) continue;
@@ -265,9 +267,7 @@ public class ActionListener implements Listener {
         MessagingAction action = (MessagingAction) alignment.getKarmaActions().get(MESSAGING);
         KarmaPreActionEvent actionEvent = new KarmaPreActionEvent(profile, MESSAGING, action);
         Bukkit.getScheduler().runTask(plugin, () -> Bukkit.getPluginManager().callEvent(actionEvent));
-        System.out.println("CANCEL");
         if (actionEvent.isCancelled()) return;
-        System.out.println("NEVER!");
         for (String string : action.getMessageMap().keySet()) {
             if (!message.toLowerCase().contains(string.toLowerCase())) continue;
             MessagingAction.MessageData data = action.getMessageMap().get(string);
@@ -282,6 +282,7 @@ public class ActionListener implements Listener {
     @EventHandler
     public void onAdvancement(PlayerAdvancementDoneEvent event) {
         String eventKey = event.getAdvancement().getKey().toString();
+        System.out.println(eventKey);
         Player player = event.getPlayer();
         KarmaProfile profile = plugin.getProfileProvider().getProfile(player);
         if (profile == null) {
@@ -327,10 +328,21 @@ public class ActionListener implements Listener {
     }
 
     @EventHandler
-    public void onPreEffect(KarmaPreActionEvent event) {
+    public void onPreAction(KarmaPreActionEvent event) {
         World world = event.getProfile().getPlayer().getWorld();
         Preferences pref = plugin.getPreferences();
-        if (!pref.isWorldListEnabler() && pref.getWorldList().contains(world) || pref.isWorldListEnabler() && !pref.getWorldList().contains(world)) {
+        if ((!pref.isWorldListEnabler() && pref.getWorldList().contains(world)) || (pref.isWorldListEnabler() && !pref.getWorldList().contains(world)) ||
+            !pref.getEnabledGameModes().contains(event.getProfile().getPlayer().getGameMode())) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onPreEffect(KarmaPreEffectEvent event) {
+        World world = event.getProfile().getPlayer().getWorld();
+        Preferences pref = plugin.getPreferences();
+        if ((!pref.isWorldListEnabler() && pref.getWorldList().contains(world)) || (pref.isWorldListEnabler() && !pref.getWorldList().contains(world)) ||
+                !pref.getEnabledGameModes().contains(event.getProfile().getPlayer().getGameMode())) {
             event.setCancelled(true);
         }
     }

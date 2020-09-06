@@ -1,6 +1,6 @@
 package com.github.klyser8.karmaoverload.commands;
 
-import com.github.klyser8.karmaoverload.KarmaOverload;
+import com.github.klyser8.karmaoverload.Karma;
 import com.github.klyser8.karmaoverload.api.Sound;
 import com.github.klyser8.karmaoverload.language.LanguageHandler;
 import com.github.klyser8.karmaoverload.language.Message;
@@ -18,9 +18,9 @@ import static me.mattstudios.mf.base.components.MfUtil.color;
 @Command("karma")
 public class HelpCommand extends CommandBase {
 
-    private final KarmaOverload plugin;
+    private final Karma plugin;
     private final Sound sound;
-    public HelpCommand(KarmaOverload plugin) {
+    public HelpCommand(Karma plugin) {
         this.plugin = plugin;
         this.sound = new Sound("ui.button.click", 1.0f, 1.5f);
     }

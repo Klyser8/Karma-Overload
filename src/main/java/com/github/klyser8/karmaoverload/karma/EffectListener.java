@@ -1,16 +1,15 @@
 package com.github.klyser8.karmaoverload.karma;
 
-import com.github.klyser8.karmaoverload.KarmaOverload;
+import com.github.klyser8.karmaoverload.Karma;
 import com.github.klyser8.karmaoverload.api.events.AlignmentChangeEvent;
 import com.github.klyser8.karmaoverload.api.events.KarmaGainEvent;
 import com.github.klyser8.karmaoverload.api.events.KarmaLossEvent;
 import com.github.klyser8.karmaoverload.api.events.KarmaPreEffectEvent;
 import com.github.klyser8.karmaoverload.karma.effects.*;
-import com.github.klyser8.karmaoverload.storage.DebugLevel;
 import com.github.klyser8.karmaoverload.storage.Preferences;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -23,19 +22,23 @@ import org.bukkit.event.weather.LightningStrikeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 import static com.github.klyser8.karmaoverload.karma.effects.KarmaEffectType.*;
 import static com.github.klyser8.karmaoverload.util.MathUtil.calculateChance;
-import static com.github.klyser8.karmaoverload.util.RandomUtil.debugMessage;
+import static com.github.klyser8.karmaoverload.util.RandomUtil.isVersion;
+import static com.github.klyser8.karmaoverload.util.RandomUtil.pickRandomPlayer;
+import static net.md_5.bungee.api.ChatColor.*;
 
 public class EffectListener implements Listener {
 
-    private final KarmaOverload plugin;
+    private final Karma plugin;
     private final Random random;
 
-    public EffectListener(KarmaOverload plugin) {
+    public EffectListener(Karma plugin) {
         this.plugin = plugin;
         this.random = new Random();
     }
@@ -129,44 +132,50 @@ public class EffectListener implements Listener {
         event.setDropItems(false);
         if (blockType.toString().contains("NETHER")) world.dropItem(block.getLocation(), new ItemStack(Material.NETHERRACK));
         else world.dropItem(block.getLocation(), new ItemStack(Material.COBBLESTONE));
-        world.spawnParticle(Particle.FLASH, block.getLocation().add(0.5, 0.5, 0.5), 1);
+        if (!isVersion("1.13")) world.spawnParticle(Particle.FLASH, block.getLocation().add(0.5, 0.5, 0.5), 1);
         if (mineral.getBreakSound() != null) mineral.getBreakSound().play(block.getLocation(), SoundCategory.BLOCKS);
     }
 
     @EventHandler
     public void onLightningStrike(LightningStrikeEvent event) {
         if (event.getCause() != LightningStrikeEvent.Cause.WEATHER) return;
-        for (Player player : event.getWorld().getPlayers()) {
+
+        List<Player> badPlayers = new ArrayList<>();
+        for (Player player : Bukkit.getOnlinePlayers()) {
             KarmaProfile profile = plugin.getProfileProvider().getProfile(player);
-            Alignment alignment = profile.getAlignment();
-            if (!alignment.getKarmaEffects().containsKey(KarmaEffectType.LIGHTNING)) continue;
-            LightningEffect effect = (LightningEffect) alignment.getKarmaEffects().get(KarmaEffectType.LIGHTNING);
-            KarmaPreEffectEvent effectEvent = new KarmaPreEffectEvent(profile, LIGHTNING, effect);
-        Bukkit.getPluginManager().callEvent(effectEvent);
-            if (effectEvent.isCancelled()) return;
-            if (effect.getPermission() != null && !player.hasPermission(effect.getPermission())) continue;
-            if (!calculateChance(effect.getChance())) continue;
-            int delay = random.nextInt(100) + 100;
-            new BukkitRunnable() {
-                int count = 0;
-                Location oldPlayerLoc = player.getLocation();
-                @Override
-                public void run() {
-                    if (count == 20) {
-                        effect.getPrepareSound().play(player.getLocation().add(0, 25, 0), SoundCategory.WEATHER, player);
-                    }
-                    if (count == delay - 15) {
-                        oldPlayerLoc = player.getLocation();
-                    }
-                    if (count == delay) {
-                        effect.strikePlayer(player, oldPlayerLoc);
-                        if (effect.getStrikeSound() != null) effect.getStrikeSound().play(player.getLocation(), SoundCategory.WEATHER, player);
-                        cancel();
-                    }
-                    count++;
-                }
-            }.runTaskTimer(plugin, 0, 1);
+            if (profile.getAlignment().getKarmaEffects().containsKey(LIGHTNING)) badPlayers.add(player);
         }
+        Player player = pickRandomPlayer(badPlayers);
+        System.out.println(player);
+        KarmaProfile profile = plugin.getProfileProvider().getProfile(player);
+        Alignment alignment = profile.getAlignment();
+        if (!alignment.getKarmaEffects().containsKey(KarmaEffectType.LIGHTNING)) return;
+        LightningEffect effect = (LightningEffect) alignment.getKarmaEffects().get(KarmaEffectType.LIGHTNING);
+        KarmaPreEffectEvent effectEvent = new KarmaPreEffectEvent(profile, LIGHTNING, effect);
+        Bukkit.getPluginManager().callEvent(effectEvent);
+        if (effectEvent.isCancelled()) return;
+        if (effect.getPermission() != null && !player.hasPermission(effect.getPermission())) return;
+        if (!calculateChance(effect.getChance())) return;
+        int delay = random.nextInt(100) + 100;
+        new BukkitRunnable() {
+            int count = 0;
+            Location oldPlayerLoc = player.getLocation();
+            @Override
+            public void run() {
+                if (count == 20) {
+                    effect.getPrepareSound().play(player.getLocation().add(0, 25, 0), SoundCategory.WEATHER, player);
+                }
+                if (count == delay - 15) {
+                    oldPlayerLoc = player.getLocation();
+                }
+                if (count == delay) {
+                    effect.strikePlayer(player);
+                    if (effect.getStrikeSound() != null) effect.getStrikeSound().play(player.getLocation(), SoundCategory.WEATHER, player);
+                    cancel();
+                }
+                count++;
+            }
+        }.runTaskTimer(plugin, 0, 1);
     }
 
     @EventHandler
@@ -280,17 +289,29 @@ public class EffectListener implements Listener {
                 double x1 = radius * Math.sin(y);
                 double z1 = radius * Math.cos(y);
                 Location particleLoc = new Location(loc.getWorld(), loc.getX() + x1, loc.getY() + y, loc.getZ() + z1);
-                loc.getWorld().spawnParticle(Particle.REDSTONE, particleLoc,
-                        20,0.1, 0.1, 0.1, new Particle.DustOptions(Color.fromRGB(alignment.getColor().getColor().getRed(),
-                                alignment.getColor().getColor().getGreen(), alignment.getColor().getColor().getBlue()), 1.5f));
+                if (isVersion("1.16")) {
+                    loc.getWorld().spawnParticle(Particle.REDSTONE, particleLoc,
+                            20, 0.1, 0.1, 0.1, new Particle.DustOptions(Color.fromRGB(alignment.getColor().getColor().getRed(),
+                                    alignment.getColor().getColor().getGreen(), alignment.getColor().getColor().getBlue()), 1.5f));
+                } else {
+                    loc.getWorld().spawnParticle(Particle.REDSTONE, particleLoc,
+                            20, 0.1, 0.1, 0.1, new Particle.DustOptions(Color.fromRGB(chatColorToColor(alignment.getColor()).getRed(),
+                                    chatColorToColor(alignment.getColor()).getGreen(), chatColorToColor(alignment.getColor()).getBlue()), 1.5f));
+                }
                 loc.getWorld().spawnParticle(Particle.END_ROD, particleLoc, 5, 0.05, 0.05, 0.05, 0);
 
                 double x2 = radius * Math.sin(y + Math.PI);
                 double z2 = radius * Math.cos(y + Math.PI);
                 particleLoc = new Location(loc.getWorld(), loc.getX() + x2, loc.getY() + y, loc.getZ() + z2);
-                loc.getWorld().spawnParticle(Particle.REDSTONE, particleLoc,
-                        20,0.1, 0.1, 0.1, new Particle.DustOptions(Color.fromRGB(alignment.getColor().getColor().getRed(),
-                                alignment.getColor().getColor().getGreen(), alignment.getColor().getColor().getBlue()), 1.5f));
+                if (isVersion("1.16")) {
+                    loc.getWorld().spawnParticle(Particle.REDSTONE, particleLoc,
+                            20, 0.1, 0.1, 0.1, new Particle.DustOptions(Color.fromRGB(alignment.getColor().getColor().getRed(),
+                                    alignment.getColor().getColor().getGreen(), alignment.getColor().getColor().getBlue()), 1.5f));
+                } else {
+                    loc.getWorld().spawnParticle(Particle.REDSTONE, particleLoc,
+                            20, 0.1, 0.1, 0.1, new Particle.DustOptions(Color.fromRGB(chatColorToColor(alignment.getColor()).getRed(),
+                                    chatColorToColor(alignment.getColor()).getGreen(), chatColorToColor(alignment.getColor()).getBlue()), 1.5f));
+                }
                 loc.getWorld().spawnParticle(Particle.END_ROD, particleLoc, 5, 0.05, 0.05, 0.05, 0);
                 if (y > 25) {
                     loc.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, particleLoc, 250, 0, 0, 0, 0.25);
@@ -299,6 +320,43 @@ public class EffectListener implements Listener {
                 }
             }
         }.runTaskTimer(plugin, 0, 1);
+    }
+
+    private Color chatColorToColor(ChatColor chatColor) {
+        if (RED.equals(chatColor)) {
+            return Color.fromRGB(252, 84, 84);
+        } if (AQUA.equals(chatColor)) {
+            return Color.fromRGB(84, 252, 252);
+        } if (BLUE.equals(chatColor)) {
+            return Color.fromRGB(84, 84, 252);
+        } if (GOLD.equals(chatColor)) {
+            return Color.fromRGB(252, 168, 0);
+        } if (GRAY.equals(chatColor)) {
+            return Color.fromRGB(168, 168, 168);
+        } if (BLACK.equals(chatColor)) {
+            return Color.fromRGB(0, 0, 0);
+        } if (GREEN.equals(chatColor)) {
+            return Color.fromRGB(84, 252, 84);
+        } if (WHITE.equals(chatColor)) {
+            return Color.fromRGB(252, 252, 252);
+        } if (YELLOW.equals(chatColor)) {
+            return Color.fromRGB(252, 252, 84);
+        } if (DARK_RED.equals(chatColor)) {
+            return Color.fromRGB(168, 0, 0);
+        } if (DARK_AQUA.equals(chatColor)) {
+            return Color.fromRGB(0, 168, 168);
+        } if (DARK_BLUE.equals(chatColor)) {
+            return Color.fromRGB(0, 0, 168);
+        } if (DARK_GRAY.equals(chatColor)) {
+            return Color.fromRGB(84, 84, 84);
+        } if (DARK_GREEN.equals(chatColor)) {
+            return Color.fromRGB(0, 168, 0);
+        } if (DARK_PURPLE.equals(chatColor)) {
+            return Color.fromRGB(168, 0, 168);
+        } if (LIGHT_PURPLE.equals(chatColor)) {
+            return Color.fromRGB(252, 84, 252);
+        }
+        return Color.fromRGB(252, 252, 252);
     }
 
 }

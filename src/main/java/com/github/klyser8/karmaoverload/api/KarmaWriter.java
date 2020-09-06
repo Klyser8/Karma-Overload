@@ -1,20 +1,17 @@
 package com.github.klyser8.karmaoverload.api;
 
-import com.github.klyser8.karmaoverload.KarmaOverload;
+import com.github.klyser8.karmaoverload.Karma;
 import com.github.klyser8.karmaoverload.api.events.AlignmentChangeEvent;
 import com.github.klyser8.karmaoverload.api.events.KarmaGainEvent;
 import com.github.klyser8.karmaoverload.api.events.KarmaLossEvent;
 import com.github.klyser8.karmaoverload.karma.Alignment;
 import com.github.klyser8.karmaoverload.karma.KarmaProfile;
 import com.github.klyser8.karmaoverload.karma.KarmaSource;
-import com.github.klyser8.karmaoverload.storage.DebugLevel;
 import com.github.klyser8.karmaoverload.storage.Preferences;
 import org.bukkit.Bukkit;
 
 import java.sql.Date;
 import java.time.Instant;
-
-import static com.github.klyser8.karmaoverload.util.RandomUtil.debugMessage;
 
 /**
  * Class which holds all necessary methods to update a player's
@@ -26,7 +23,7 @@ public class KarmaWriter {
 
     private KarmaWriter() {}
 
-    private static void addKarma(KarmaOverload plugin, KarmaProfile profile, double amount, KarmaSource source) {
+    private static void addKarma(Karma plugin, KarmaProfile profile, double amount, KarmaSource source) {
         if (amount <= 0) return;
         double recentKarma = plugin.getKarmaLimitMap().get(profile.getPlayer());
         KarmaGainEvent event = new KarmaGainEvent(profile, profile.getKarma(), profile.getKarma() + amount, amount, source);
@@ -42,10 +39,10 @@ public class KarmaWriter {
         profile.setKarma(event.getOldKarma() + event.getGainedKarma());
         profile.addHistoryEntry(Date.from(Instant.now()), source, event.getGainedKarma());
         if (source == KarmaSource.COMMAND || source == KarmaSource.VOTING) return;
-        plugin.getKarmaLimitMap().put(profile.getPlayer(), recentKarma + event.getGainedKarma());
+        plugin.getKarmaLimitMap().put(profile.getPlayer(), (double) Math.round(recentKarma + event.getGainedKarma() * 10) / 10);
     }
 
-    private static void subtractKarma(KarmaOverload plugin, KarmaProfile profile, double amount, KarmaSource source) {
+    private static void subtractKarma(Karma plugin, KarmaProfile profile, double amount, KarmaSource source) {
         if (amount <= 0) return;
         double recentKarma = plugin.getKarmaLimitMap().get(profile.getPlayer());
         KarmaLossEvent event = new KarmaLossEvent(profile, profile.getKarma(), profile.getKarma() - amount, amount, source);
@@ -61,7 +58,7 @@ public class KarmaWriter {
         profile.setKarma(event.getOldKarma() - event.getLostKarma());
         profile.addHistoryEntry(Date.from(Instant.now()), source, -event.getLostKarma());
         if (source == KarmaSource.COMMAND || source == KarmaSource.VOTING) return;
-        plugin.getKarmaLimitMap().put(profile.getPlayer(), recentKarma + event.getLostKarma());
+        plugin.getKarmaLimitMap().put(profile.getPlayer(), (double) Math.round(recentKarma + event.getLostKarma() * 10) / 10);
     }
 
 
@@ -75,12 +72,12 @@ public class KarmaWriter {
      *
      *  A player's karma cannot exceed the limit established using this method.
      *
-     * @param plugin instance of {@link KarmaOverload}
+     * @param plugin instance of {@link Karma}
      * @param profile the profile to update.
      * @param amount the amount to alter the player's Karma score by
      * @param source the source which the Karma score comes from. Check {@link com.github.klyser8.karmaoverload.karma.KarmaSource}
      */
-    public static void changeKarma(KarmaOverload plugin, KarmaProfile profile, double amount, KarmaSource source) {
+    public static void changeKarma(Karma plugin, KarmaProfile profile, double amount, KarmaSource source) {
         Preferences pref = plugin.getPreferences();
         if (amount < 0) {
             amount = Math.abs(amount);
@@ -102,12 +99,12 @@ public class KarmaWriter {
      *
      *  A player's karma cannot exceed the limit established using this method.
      *
-     * @param plugin plugin instance of {@link KarmaOverload}
+     * @param plugin plugin instance of {@link Karma}
      * @param profile the profile to update
      * @param karma the new karma score to set.
      * @param source the source which the karma came from. Check {@link com.github.klyser8.karmaoverload.karma.KarmaSource}
      */
-    public static void setKarma(KarmaOverload plugin, KarmaProfile profile, double karma, KarmaSource source) {
+    public static void setKarma(Karma plugin, KarmaProfile profile, double karma, KarmaSource source) {
         if (karma > plugin.getPreferences().getHighLimit()) karma = plugin.getPreferences().getHighLimit();
         double change = karma - profile.getKarma();
         KarmaWriter.changeKarma(plugin, profile, change, source);
@@ -116,13 +113,13 @@ public class KarmaWriter {
 
     /** Updates the player's Karma alignment. This method should be used
      *  after the player's Karma score has been changed without using
-     *  {@link #changeKarma(KarmaOverload, KarmaProfile, double, KarmaSource)}
+     *  {@link #changeKarma(Karma, KarmaProfile, double, KarmaSource)}
      *
-     * @param plugin instance of {@link KarmaOverload}
+     * @param plugin instance of {@link Karma}
      * @param profile the profile to update.
      * @param triggerEvent whether this method should trigger a {@link com.github.klyser8.karmaoverload.api.events.AlignmentChangeEvent}
      */
-    public static void updateAlignment(KarmaOverload plugin, KarmaProfile profile, boolean triggerEvent) {
+    public static void updateAlignment(Karma plugin, KarmaProfile profile, boolean triggerEvent) {
         for (Alignment alignment : plugin.getAlignments()) {
             if (!(alignment.getLowThreshold() <= profile.getKarma() && profile.getKarma() <= alignment.getHighThreshold())) continue;
             if (profile.getAlignment() != null && profile.getAlignment().getName().equalsIgnoreCase(alignment.getName())) return;

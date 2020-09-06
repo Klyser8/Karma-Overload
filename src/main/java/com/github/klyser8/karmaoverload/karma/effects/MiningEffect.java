@@ -1,6 +1,6 @@
 package com.github.klyser8.karmaoverload.karma.effects;
 
-import com.github.klyser8.karmaoverload.KarmaOverload;
+import com.github.klyser8.karmaoverload.Karma;
 import com.github.klyser8.karmaoverload.api.Sound;
 import com.github.klyser8.karmaoverload.karma.AlignmentFactory;
 import com.github.klyser8.karmaoverload.api.KarmaEffect;
@@ -12,7 +12,7 @@ public class MiningEffect extends KarmaEffect {
 
     private Map<Material, KarmaMineral> mineralMap;
 
-    public MiningEffect(final KarmaOverload plugin, List<String> materialCodes, boolean doubleSound) {
+    public MiningEffect(final Karma plugin, List<String> materialCodes, boolean doubleSound) {
         super(plugin, 0, null); //0, 0, null since these will be provided by the KarmaMineral objects.
         this.plugin = plugin;
         mineralMap = new HashMap<>();

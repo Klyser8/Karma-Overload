@@ -1,6 +1,6 @@
 package com.github.klyser8.karmaoverload.storage;
 
-import com.github.klyser8.karmaoverload.KarmaOverload;
+import com.github.klyser8.karmaoverload.Karma;
 import com.github.klyser8.karmaoverload.api.KarmaWriter;
 import com.github.klyser8.karmaoverload.karma.Alignment;
 import com.github.klyser8.karmaoverload.karma.KarmaProfile;
@@ -25,9 +25,9 @@ import static com.github.klyser8.karmaoverload.util.RandomUtil.debugMessage;
 public class ProfileProvider {
 
     private final Map<Player, KarmaProfile> profiles;
-    private final KarmaOverload plugin;
+    private final Karma plugin;
 
-    public ProfileProvider(KarmaOverload plugin) {
+    public ProfileProvider(Karma plugin) {
         this.plugin = plugin;
         profiles = new HashMap<>();
         File folder = new File(plugin.getDataFolder() + File.separator + "players");
@@ -44,7 +44,10 @@ public class ProfileProvider {
                     Gson gson = new Gson();
                     try {
                         DeserializedKarmaProfile deserializedProfile = gson.fromJson(new FileReader(playerFile), DeserializedKarmaProfile.class);
-                        profile.setKarma(deserializedProfile.getKarma());
+                        double karma = deserializedProfile.getKarma();
+                        if (deserializedProfile.getKarma() > plugin.getPreferences().getHighLimit()) karma = plugin.getPreferences().getHighLimit();
+                        else if (deserializedProfile.getKarma() < plugin.getPreferences().getLowLimit()) karma = plugin.getPreferences().getLowLimit();
+                        profile.setKarma(karma);
                         for (KarmaProfile.HistoryEntry entry : deserializedProfile.getHistory()) {
                             profile.addHistoryEntry(entry.getDate(), entry.getSource(), entry.getAmount());
                         }
@@ -59,7 +62,10 @@ public class ProfileProvider {
                     PreparedStatement statement = plugin.getConnection().prepareStatement(sqlQuery);
                     ResultSet resultSet = statement.executeQuery();
                     if (resultSet.next()) {
-                        profile.setKarma(resultSet.getDouble("Score"));
+                        double karma = resultSet.getDouble("Score");
+                        if (karma > plugin.getPreferences().getHighLimit()) karma = plugin.getPreferences().getHighLimit();
+                        else if (karma < plugin.getPreferences().getLowLimit()) karma = plugin.getPreferences().getLowLimit();
+                        profile.setKarma(karma);
                     }
 
                     statement = plugin.getConnection().prepareStatement(historySQLQuery);

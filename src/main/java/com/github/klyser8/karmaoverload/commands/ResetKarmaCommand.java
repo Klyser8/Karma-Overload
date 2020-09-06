@@ -1,6 +1,6 @@
 package com.github.klyser8.karmaoverload.commands;
 
-import com.github.klyser8.karmaoverload.KarmaOverload;
+import com.github.klyser8.karmaoverload.Karma;
 import com.github.klyser8.karmaoverload.api.KarmaWriter;
 import com.github.klyser8.karmaoverload.api.Sound;
 import com.github.klyser8.karmaoverload.karma.KarmaProfile;
@@ -19,10 +19,10 @@ import static me.mattstudios.mf.base.components.MfUtil.color;
 @Command("karma")
 public class ResetKarmaCommand extends CommandBase {
 
-    private final KarmaOverload plugin;
+    private final Karma plugin;
     private final Sound errorSound;
     private final Sound sound;
-    public ResetKarmaCommand(KarmaOverload plugin) {
+    public ResetKarmaCommand(Karma plugin) {
         this.plugin = plugin;
         this.errorSound = new Sound("block.note_block.bass", 1.0f, 1.0f);
         this.sound = new Sound("ui.button.click", 1.0f, 1.5f);

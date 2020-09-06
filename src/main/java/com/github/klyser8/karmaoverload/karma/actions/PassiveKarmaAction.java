@@ -1,6 +1,6 @@
 package com.github.klyser8.karmaoverload.karma.actions;
 
-import com.github.klyser8.karmaoverload.KarmaOverload;
+import com.github.klyser8.karmaoverload.Karma;
 import com.github.klyser8.karmaoverload.api.KarmaAction;
 import com.github.klyser8.karmaoverload.api.KarmaWriter;
 import com.github.klyser8.karmaoverload.api.Sound;
@@ -18,7 +18,7 @@ public class PassiveKarmaAction extends KarmaAction {
 
     private PassiveRunnable runnable;
 
-    public PassiveKarmaAction(KarmaOverload plugin, double amount, double chance, int interval, String permission, Sound sound) {
+    public PassiveKarmaAction(Karma plugin, double amount, double chance, int interval, String permission, Sound sound) {
         super(plugin, amount, chance, permission);
         this.interval = interval;
         this.sound = sound;
@@ -26,7 +26,7 @@ public class PassiveKarmaAction extends KarmaAction {
 
     public void startRunnable(Player player) {
         runnable = new PassiveRunnable(player);
-        runnable.runTaskTimer(plugin, interval * 20, interval * 20);
+        runnable.runTaskTimer(plugin, 20, 20);
     }
 
     public void stopRunnable() {
@@ -53,12 +53,17 @@ public class PassiveKarmaAction extends KarmaAction {
             this.player = player;
         }
 
+        private int count = 0;
+
         @Override
         public void run() {
-            if (player.hasPermission(permission)) {
+            count++;
+
+            if (count >= interval && player.hasPermission(permission)) {
                 KarmaProfile profile = plugin.getProfileProvider().getProfile(player);
                 KarmaWriter.changeKarma(plugin, profile, amount, KarmaSource.PASSIVE);
                 if (sound != null) sound.play(player.getEyeLocation(), SoundCategory.BLOCKS, player);
+                count = 0;
             }
         }
 

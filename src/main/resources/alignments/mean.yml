@@ -63,19 +63,19 @@ Actions:
 
 Effects:
   KARMA_MULTIPLIER: chance = 1.0; gainMult = 1.5; lossMult = 1.0; perm = karma.effect.karma_mult;
-  EXP_MULTIPLIER: chance = 0.3; mult = 0.8; permission = karma.effect.exp_mult; sound = block.note_block.didgeridoo(1.0, 1.0)
+  EXP_MULTIPLIER: chance = 0.3; mult = 0.8; permission = karma.effect.exp_mult; sound = block.note_block.bass(1.0, 1.0)
   LIGHTNING: chance = 0.2; permission = karma.effect.lightning; prepareSound = entity.illusioner.prepare_blindness(5.0, 0.75)
   MOB_ANGER: chance = 0.0075; radius = 10; permission = karma.effect.anger; sound = entity.polar_bear.warning(2.0, 1.25)
-  LOOT_GENERATION: chance = 0.3; mult = 0.8; permission = karma.effect.loot; sound = block.note_block.banjo(1.0, 0.5)
+  LOOT_GENERATION: chance = 0.3; mult = 0.8; permission = karma.effect.loot; sound = block.note_block.hat(1.0, 0.5)
   MINERAL_FAIL:
-    - COAL_ORE{chance = 0.4; permission = karma.effect.mineral.fail.coal; sound = block.bell.use(1.0, 0.5)}
-    - IRON_ORE{chance = 0.3; permission = karma.effect.mineral.fail.iron; sound = block.bell.use(1.0, 0.5)}
-    - GOLD_ORE{chance = 0.3; permission = karma.effect.mineral.fail.gold; sound = block.bell.use(1.0, 0.5)}
-    - REDSTONE_ORE{chance = 0.3; permission = karma.effect.mineral.fail.redstone; sound = block.bell.use(1.0, 0.5)}
-    - LAPIS_ORE{chance = 0.3; permission = karma.effect.mineral.fail.lapis; sound = block.bell.use(1.0, 0.5)}
-    - EMERALD_ORE{chance = 0.15; permission = karma.effect.mineral.fail.emerald; sound = block.bell.use(1.0, 0.5)}
-    - DIAMOND_ORE{chance = 0.15; permission = karma.effect.mineral.fail.diamond; sound = block.bell.use(1.0, 0.5)}
-    - NETHER_QUARTZ_ORE{chance = 0.3; permission = karma.effect.mineral.fail.quartz; sound = block.bell.use(1.0, 0.5)}
+    - COAL_ORE{chance = 0.4; permission = karma.effect.mineral.fail.coal; sound = entity.evoker.prepare_summon(1.0, 2.0)}
+    - IRON_ORE{chance = 0.3; permission = karma.effect.mineral.fail.iron; sound = entity.evoker.prepare_summon(1.0, 2.0)}
+    - GOLD_ORE{chance = 0.3; permission = karma.effect.mineral.fail.gold; sound = entity.evoker.prepare_summon(1.0, 2.0)}
+    - REDSTONE_ORE{chance = 0.3; permission = karma.effect.mineral.fail.redstone; sound = entity.evoker.prepare_summon(1.0, 2.0)}
+    - LAPIS_ORE{chance = 0.3; permission = karma.effect.mineral.fail.lapis; sound = entity.evoker.prepare_summon(1.0, 2.0)}
+    - EMERALD_ORE{chance = 0.15; permission = karma.effect.mineral.fail.emerald; sound = entity.evoker.prepare_summon(1.0, 2.0)}
+    - DIAMOND_ORE{chance = 0.15; permission = karma.effect.mineral.fail.diamond; sound = entity.evoker.prepare_summon(1.0, 2.0)}
+    - NETHER_QUARTZ_ORE{chance = 0.3; permission = karma.effect.mineral.fail.quartz; sound = entity.evoker.prepare_summon(1.0, 2.0)}
 
 Commands:
   - "say %player% is mean"

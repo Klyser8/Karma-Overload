@@ -1,6 +1,6 @@
 package com.github.klyser8.karmaoverload.storage;
 
-import com.github.klyser8.karmaoverload.KarmaOverload;
+import com.github.klyser8.karmaoverload.Karma;
 import com.github.klyser8.karmaoverload.karma.Alignment;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -42,8 +42,8 @@ public class Preferences {
     private final List<World> worldList;
     private final List<GameMode> enabledGameModes;
 
-    private final KarmaOverload plugin;
-    public Preferences(KarmaOverload plugin) {
+    private final Karma plugin;
+    public Preferences(Karma plugin) {
         this.plugin = plugin;
         this.worldList = new ArrayList<>();
         this.enabledGameModes = new ArrayList<>();
@@ -66,8 +66,8 @@ public class Preferences {
             password = config.getString("Database.Password");
         }
 
-        saveInterval = config.getInt("Autosave Interval") * 20;
-        karmaLimitResetInterval = config.getInt("Karma Limit Reset Interval") * 20;
+        saveInterval = config.getInt("Autosave Interval");
+        karmaLimitResetInterval = config.getInt("Karma Limit Reset Interval");
 
 
         if (config.getString("Karma Gain Particle") != null) {
@@ -84,14 +84,17 @@ public class Preferences {
             if (alignment.getLowThreshold() < lowLimit) lowLimit = alignment.getLowThreshold();
             if (alignment.getHighThreshold() > highLimit) highLimit = alignment.getHighThreshold();
         }
+        enabledGameModes.clear();
         for (String gameModeString : config.getStringList("Enabled GameModes")) {
             enabledGameModes.add(GameMode.valueOf(gameModeString));
         }
 
         worldListEnabler = config.getBoolean("Enabled World List");
+        worldList.clear();
         for (String worldName : config.getStringList("Worlds")) {
             worldList.add(Bukkit.getWorld(worldName));
         }
+        plugin.reloadDB();
         plugin.getLanguageHandler().setup();
     }
 
@@ -153,10 +156,6 @@ public class Preferences {
 
     public boolean isSoftCap() {
         return softCap;
-    }
-
-    public void setSoftCap(boolean softCap) {
-        this.softCap = softCap;
     }
 
     public boolean isCommandSoundsEnabled() {

@@ -1,6 +1,6 @@
 package com.github.klyser8.karmaoverload.storage;
 
-import com.github.klyser8.karmaoverload.KarmaOverload;
+import com.github.klyser8.karmaoverload.Karma;
 import com.github.klyser8.karmaoverload.karma.KarmaProfile;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -12,7 +12,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -21,11 +20,11 @@ import static com.github.klyser8.karmaoverload.util.RandomUtil.debugMessage;
 
 public class ProfileWriter {
 
-    private final KarmaOverload plugin;
+    private final Karma plugin;
     private final Preferences pref;
 
     private final BukkitRunnable saveRunnable;
-    public ProfileWriter(KarmaOverload plugin) {
+    public ProfileWriter(Karma plugin) {
         this.plugin = plugin;
         pref = plugin.getPreferences();
         saveRunnable = new SaveRunnable();
@@ -97,7 +96,6 @@ public class ProfileWriter {
                 addHistoryQuery += " ('" + uuid + "', '" + sdf.format(entry.getDate()) + "', '" + entry.getSource() + "', " + entry.getAmount() + "),";
             }
             addHistoryQuery = StringUtils.removeEnd(addHistoryQuery, ",") + ";";
-            System.out.println(addHistoryQuery);
 
             try {
                 PreparedStatement statement = plugin.getConnection().prepareStatement(addUserSQLQuery);
@@ -128,7 +126,7 @@ public class ProfileWriter {
         @Override
         public void run() {
             count++;
-            if (count != pref.getSaveInterval()) return;
+            if (count < pref.getSaveInterval()) return;
             for (Player player : Bukkit.getOnlinePlayers()) {
                 if (pref.getStorageType() == Preferences.JSON_STORAGE) saveProfileGson(plugin.getProfileProvider().getProfile(player));
                 else if (pref.getStorageType() == Preferences.MYSQL_STORAGE)

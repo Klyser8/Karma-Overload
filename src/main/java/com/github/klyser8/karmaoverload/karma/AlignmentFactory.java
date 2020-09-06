@@ -1,6 +1,6 @@
 package com.github.klyser8.karmaoverload.karma;
 
-import com.github.klyser8.karmaoverload.KarmaOverload;
+import com.github.klyser8.karmaoverload.Karma;
 import com.github.klyser8.karmaoverload.api.KarmaAction;
 import com.github.klyser8.karmaoverload.api.Sound;
 import com.github.klyser8.karmaoverload.karma.actions.*;
@@ -16,6 +16,7 @@ import java.util.*;
 
 import static com.github.klyser8.karmaoverload.karma.effects.KarmaEffectType.*;
 import static com.github.klyser8.karmaoverload.util.RandomUtil.debugMessage;
+import static com.github.klyser8.karmaoverload.util.RandomUtil.isVersion;
 
 /**
  * Parses and creates the plugin's alignments. These can be found in
@@ -25,9 +26,9 @@ import static com.github.klyser8.karmaoverload.util.RandomUtil.debugMessage;
  */
 public class AlignmentFactory {
 
-    private final KarmaOverload plugin;
+    private final Karma plugin;
 
-    public AlignmentFactory(KarmaOverload plugin) {
+    public AlignmentFactory(Karma plugin) {
         this.plugin = plugin;
     }
 
@@ -85,7 +86,7 @@ public class AlignmentFactory {
 
     private ChatColor createColor(String colorString) {
         ChatColor color;
-        if (colorString.length() == 2) color = ChatColor.getByChar(colorString.charAt(1));
+        if (colorString.length() == 2 || !isVersion("1.16")) color = ChatColor.getByChar(colorString.charAt(1));
         else color = ChatColor.of(colorString);
         return color;
     }

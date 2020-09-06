@@ -1,6 +1,6 @@
 package com.github.klyser8.karmaoverload.language;
 
-import com.github.klyser8.karmaoverload.KarmaOverload;
+import com.github.klyser8.karmaoverload.Karma;
 import com.github.klyser8.karmaoverload.storage.DebugLevel;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -16,9 +16,9 @@ import static me.mattstudios.mf.base.components.MfUtil.color;
 
 public class LanguageHandler {
 
-    private final KarmaOverload plugin;
+    private final Karma plugin;
 
-    public LanguageHandler(KarmaOverload plugin) {
+    public LanguageHandler(Karma plugin) {
         this.plugin = plugin;
     }
 

@@ -15,6 +15,7 @@ Command Sound: true
 #Storage Type
 #1: Json
 #2: MySQL Database
+#When changing storage type, to easily move the data from Json to the database simply do '/karma reload' followed by '/karma save' after changing this field.
 Storage Type: 1
 
 #Auto-save interval (In seconds)
@@ -35,6 +36,7 @@ Database:
 Starting Score: 0
 
 #The size that a player's Karma History should be. Lower values results in higher performance.
+#This change takes effect after reloading/restarting the server.
 Karma History Size: 10
 
 #How often players karma gain/loss limits should reset (in seconds). Very low numbers may cause lag.
@@ -43,7 +45,7 @@ Karma Limit Reset Interval: 3600
 #https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Particle.html
 #What particles should play around the player upon gaining Karma. The amount of particles changes based on the amount of Karma gained.
 #Typing "null" will result in no particles playing.
-Karma Gain Particle: COMPOSTER
+Karma Gain Particle: VILLAGER_HAPPY
 
 #https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Particle.html
 #What particles should play upon the player losing Karma. The amount of particles changes based on the amount of Karma lost.

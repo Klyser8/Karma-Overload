@@ -9,25 +9,23 @@ import com.github.klyser8.karmaoverload.karma.worldguard.FlagListener;
 import com.github.klyser8.karmaoverload.karma.worldguard.KarmaFlags;
 import com.github.klyser8.karmaoverload.language.LanguageHandler;
 import com.github.klyser8.karmaoverload.storage.*;
-import com.sk89q.worldguard.protection.RegionResultSet;
 import me.mattstudios.mf.base.CommandManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.io.File;
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 
 import static com.github.klyser8.karmaoverload.util.RandomUtil.debugMessage;
 
-public final class KarmaOverload extends JavaPlugin {
+public final class Karma extends JavaPlugin {
+
+    public static final String VERSION = Bukkit.getVersion();
 
     private final List<Alignment> alignments;
 
@@ -43,7 +41,7 @@ public final class KarmaOverload extends JavaPlugin {
 
     private final Map<Player, Double> karmaLimitMap;
 
-    public KarmaOverload() {
+    public Karma() {
         preferences = new Preferences(this);
         languageHandler = new LanguageHandler(this);
         profileProvider = new ProfileProvider(this);
@@ -97,6 +95,13 @@ public final class KarmaOverload extends JavaPlugin {
         limitRunnable.cancel();
     }
 
+    public void reloadDB() {
+        if (preferences.getStorageType() == Preferences.MYSQL_STORAGE) {
+            connectMySQLDB();
+            createDBTables();
+        }
+    }
+
     private void connectMySQLDB() {
         try {
             connection = DriverManager.getConnection("jdbc:mysql://" + preferences.getHost() + ":" + preferences.getPort() + "/" + preferences.getDbName() + "?useSSL=false",
@@ -111,7 +116,7 @@ public final class KarmaOverload extends JavaPlugin {
         String queryExists = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '<TABLE_NAME>';";
         String createKarmaTableQuery = "CREATE TABLE `KarmaTable` (" +
                 "`UUID` VARCHAR(50) NOT NULL COLLATE `utf8_general_ci`," +
-                "`Score` DOUBLE(22,0) NULL DEFAULT " + preferences.getStartingScore() + "," +
+                "`Score` DOUBLE(22,1) NULL DEFAULT " + preferences.getStartingScore() + "," +
                 "UNIQUE INDEX `UUID` (`UUID`) USING BTREE" +
                 ")" +
                 "COLLATE='utf8_general_ci'" +
@@ -121,7 +126,7 @@ public final class KarmaOverload extends JavaPlugin {
                 "`UUID` VARCHAR(50) NOT NULL COLLATE `latin1_swedish_ci`," +
                 "`EventTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP," +
                 "`Source` VARCHAR(50) NOT NULL COLLATE `latin1_swedish_ci`," +
-                "`Change` DOUBLE(22,0) NOT NULL" +
+                "`Change` DOUBLE(22,1) NOT NULL" +
                 ")" +
                 "COLLATE='utf8_general_ci'" +
                 ";";
@@ -186,12 +191,13 @@ public final class KarmaOverload extends JavaPlugin {
         public void run() {
             count++;
             if (count < getPreferences().getKarmaLimitResetInterval()) return;
-            Player[] playerList = (Player[]) karmaLimitMap.keySet().toArray();
+            List<Player> playerList = new ArrayList<>(karmaLimitMap.keySet());
             for (Player player : playerList) {
                 if (!player.isOnline()) karmaLimitMap.remove(player);
                 else karmaLimitMap.put(player, 0.0);
             }
             count = 0;
+            debugMessage(Karma.this, "Player recent karma limit has been reset", DebugLevel.LOW);
         }
     }
 }

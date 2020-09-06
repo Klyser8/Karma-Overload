@@ -1,6 +1,6 @@
 package com.github.klyser8.karmaoverload.karma.effects;
 
-import com.github.klyser8.karmaoverload.KarmaOverload;
+import com.github.klyser8.karmaoverload.Karma;
 import com.github.klyser8.karmaoverload.api.KarmaEffect;
 import com.github.klyser8.karmaoverload.api.Sound;
 import org.bukkit.inventory.ItemStack;
@@ -13,7 +13,7 @@ public class LootGenerationEffect extends KarmaEffect {
     private final double lootMultiplier;
     private final Sound sound;
 
-    public LootGenerationEffect(KarmaOverload plugin, double chance, double lootMultiplier, String permission, Sound lootSound) {
+    public LootGenerationEffect(Karma plugin, double chance, double lootMultiplier, String permission, Sound lootSound) {
         super(plugin, chance, permission);
         this.lootMultiplier = lootMultiplier;
         this.sound = lootSound;

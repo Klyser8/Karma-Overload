@@ -1,6 +1,6 @@
 package com.github.klyser8.karmaoverload.karma.actions;
 
-import com.github.klyser8.karmaoverload.KarmaOverload;
+import com.github.klyser8.karmaoverload.Karma;
 import com.github.klyser8.karmaoverload.api.KarmaAction;
 import com.github.klyser8.karmaoverload.api.Sound;
 import com.github.klyser8.karmaoverload.karma.AlignmentFactory;
@@ -14,7 +14,7 @@ public class MessagingAction extends KarmaAction {
 
     private Map<String, MessageData> messageMap;
 
-    public MessagingAction(KarmaOverload plugin, List<String> messageCodes) {
+    public MessagingAction(Karma plugin, List<String> messageCodes) {
         super(plugin, 0, 0, null); //0, 0, null since these will be provided by the MessageData objects.
         messageMap = new HashMap<>();
 

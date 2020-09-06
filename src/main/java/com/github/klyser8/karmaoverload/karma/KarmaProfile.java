@@ -1,6 +1,6 @@
 package com.github.klyser8.karmaoverload.karma;
 
-import com.github.klyser8.karmaoverload.KarmaOverload;
+import com.github.klyser8.karmaoverload.Karma;
 import com.github.klyser8.karmaoverload.api.KarmaWriter;
 import org.bukkit.entity.Player;
 
@@ -10,7 +10,7 @@ import java.util.List;
 
 public class KarmaProfile {
 
-    private final KarmaOverload plugin;
+    private final Karma plugin;
 
     private final Player player;
     private double karma;
@@ -18,9 +18,10 @@ public class KarmaProfile {
 
     private final List<HistoryEntry> history;
 
-    public KarmaProfile(KarmaOverload plugin, Player player) {
+    public KarmaProfile(Karma plugin, Player player) {
         this.player = player;
         this.plugin = plugin;
+        karma = plugin.getPreferences().getStartingScore();
         history = new ArrayList<>();
 
         for (Alignment alignment : plugin.getAlignments()) {
@@ -47,7 +48,7 @@ public class KarmaProfile {
      * Sets a players Karma to the provided amount.
      *
      * @deprecated changing Karma using this method does not trigger events. Use
-     * {@link KarmaWriter#setKarma(KarmaOverload, KarmaProfile, double, KarmaSource)}
+     * {@link KarmaWriter#setKarma(Karma, KarmaProfile, double, KarmaSource)}
      * Rounds up/down to one decimal place.
      *
      * @param score = Karma score to set to

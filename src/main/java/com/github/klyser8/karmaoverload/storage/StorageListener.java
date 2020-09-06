@@ -1,6 +1,6 @@
 package com.github.klyser8.karmaoverload.storage;
 
-import com.github.klyser8.karmaoverload.KarmaOverload;
+import com.github.klyser8.karmaoverload.Karma;
 import com.github.klyser8.karmaoverload.karma.Alignment;
 import com.github.klyser8.karmaoverload.karma.KarmaProfile;
 import com.github.klyser8.karmaoverload.karma.actions.KarmaActionType;
@@ -13,9 +13,9 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class StorageListener implements Listener {
 
-    private final KarmaOverload plugin;
+    private final Karma plugin;
 
-    public StorageListener(KarmaOverload plugin) {
+    public StorageListener(Karma plugin) {
         this.plugin = plugin;
     }
 

@@ -1,6 +1,6 @@
-name: KarmaOverload
+name: Karma
 version: ${project.version}
-main: com.github.klyser8.karmaoverload.KarmaOverload
+main: com.github.klyser8.karmaoverload.Karma
 api-version: 1.13
 softdepend: [PlaceholderAPI, ProtocolLib, WorldGuard, Citizens, Votifier]
 authors: [Klyser8]

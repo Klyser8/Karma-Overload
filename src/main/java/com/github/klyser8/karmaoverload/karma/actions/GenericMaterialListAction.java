@@ -1,6 +1,6 @@
 package com.github.klyser8.karmaoverload.karma.actions;
 
-import com.github.klyser8.karmaoverload.KarmaOverload;
+import com.github.klyser8.karmaoverload.Karma;
 import com.github.klyser8.karmaoverload.api.KarmaAction;
 import com.github.klyser8.karmaoverload.api.Sound;
 import com.github.klyser8.karmaoverload.karma.AlignmentFactory;
@@ -12,7 +12,7 @@ public class GenericMaterialListAction extends KarmaAction {
 
     private Map<Material, KarmaMaterialData> materialsMap;
 
-    public GenericMaterialListAction(KarmaOverload plugin, List<String> codes) {
+    public GenericMaterialListAction(Karma plugin, List<String> codes) {
         super(plugin, 0, 0, null); //0, 0, null since these will be provided by the KarmaMaterialData objects.
         materialsMap = new HashMap<>();
         for (String foodCode : codes) {

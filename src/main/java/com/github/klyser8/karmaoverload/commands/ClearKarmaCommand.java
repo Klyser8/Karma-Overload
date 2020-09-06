@@ -1,6 +1,6 @@
 package com.github.klyser8.karmaoverload.commands;
 
-import com.github.klyser8.karmaoverload.KarmaOverload;
+import com.github.klyser8.karmaoverload.Karma;
 import com.github.klyser8.karmaoverload.api.KarmaWriter;
 import com.github.klyser8.karmaoverload.api.Sound;
 import com.github.klyser8.karmaoverload.karma.KarmaProfile;
@@ -17,9 +17,9 @@ import org.bukkit.entity.Player;
 @Command("karma")
 public class ClearKarmaCommand extends CommandBase {
 
-    private final KarmaOverload plugin;
+    private final Karma plugin;
     private final Sound sound;
-    public ClearKarmaCommand(KarmaOverload plugin) {
+    public ClearKarmaCommand(Karma plugin) {
         this.plugin = plugin;
         this.sound = new Sound("ui.button.click", 1.0f, 1.5f);
     }
@@ -31,6 +31,7 @@ public class ClearKarmaCommand extends CommandBase {
         KarmaProfile profile = plugin.getProfileProvider().getProfile((Player) sender);
         sender.sendMessage(plugin.getLanguageHandler().getMessage(Message.SCORE_CLEARED_SUCCESSFULLY));
         KarmaWriter.setKarma(plugin, profile, plugin.getPreferences().getStartingScore(), KarmaSource.COMMAND);
+        if (!plugin.getPreferences().isCommandSoundsEnabled()) return;
         sound.play(((Player) sender).getLocation(), SoundCategory.MASTER, (Player) sender);
     }
 

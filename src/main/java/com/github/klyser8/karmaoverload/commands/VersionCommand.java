@@ -1,6 +1,6 @@
 package com.github.klyser8.karmaoverload.commands;
 
-import com.github.klyser8.karmaoverload.KarmaOverload;
+import com.github.klyser8.karmaoverload.Karma;
 import com.github.klyser8.karmaoverload.api.Sound;
 import com.github.klyser8.karmaoverload.language.Message;
 import me.mattstudios.mf.annotations.Command;
@@ -14,9 +14,9 @@ import org.bukkit.entity.Player;
 @Command("karma")
 public class VersionCommand extends CommandBase {
 
-    private final KarmaOverload plugin;
+    private final Karma plugin;
     private final Sound sound;
-    public VersionCommand(KarmaOverload plugin) {
+    public VersionCommand(Karma plugin) {
         this.plugin = plugin;
         this.sound = new Sound("ui.button.click", 1.0f, 1.5f);
     }

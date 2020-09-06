@@ -1,6 +1,6 @@
 package com.github.klyser8.karmaoverload.commands.storage;
 
-import com.github.klyser8.karmaoverload.KarmaOverload;
+import com.github.klyser8.karmaoverload.Karma;
 import com.github.klyser8.karmaoverload.api.KarmaWriter;
 import com.github.klyser8.karmaoverload.api.Sound;
 import com.github.klyser8.karmaoverload.karma.KarmaProfile;
@@ -18,9 +18,9 @@ import org.bukkit.entity.Player;
 @Command("karma")
 public class ReloadCommand extends CommandBase {
 
-    private final KarmaOverload plugin;
+    private final Karma plugin;
     private final Sound sound;
-    public ReloadCommand(KarmaOverload plugin) {
+    public ReloadCommand(Karma plugin) {
         this.plugin = plugin;
         this.sound = new Sound("ui.button.click", 1.0f, 1.5f);
     }
@@ -29,15 +29,15 @@ public class ReloadCommand extends CommandBase {
     @Completion("#empty")
     @Permission("karma.command.reload")
     public void reloadCommand(CommandSender sender) {
-        plugin.getPreferences().loadPreferences();
         plugin.getAlignmentFactory().setup();
+        plugin.getPreferences().loadPreferences();
         sender.sendMessage(plugin.getLanguageHandler().getMessage(Message.RELOAD));
         for (Player player : Bukkit.getOnlinePlayers()) {
             KarmaProfile profile = plugin.getProfileProvider().getProfile(player);
             profile.setAlignment(null); //Replacing old alignment object with a new, updated one for each player.
             KarmaWriter.updateAlignment(plugin, profile, false);
         }
-        if (!(sender instanceof Player)) return;
+        if (!(sender instanceof Player) || !plugin.getPreferences().isCommandSoundsEnabled()) return;
         sound.play(((Player) sender).getLocation(), SoundCategory.MASTER, (Player) sender);
     }
 

@@ -1,6 +1,6 @@
 package com.github.klyser8.karmaoverload.commands.storage;
 
-import com.github.klyser8.karmaoverload.KarmaOverload;
+import com.github.klyser8.karmaoverload.Karma;
 import com.github.klyser8.karmaoverload.api.Sound;
 import com.github.klyser8.karmaoverload.karma.KarmaProfile;
 import com.github.klyser8.karmaoverload.language.Message;
@@ -18,9 +18,9 @@ import org.bukkit.entity.Player;
 @Command("karma")
 public class SaveCommand extends CommandBase {
 
-    private final KarmaOverload plugin;
+    private final Karma plugin;
     private final Sound sound;
-    public SaveCommand(KarmaOverload plugin) {
+    public SaveCommand(Karma plugin) {
         this.plugin = plugin;
         this.sound = new Sound("ui.button.click", 1.0f, 1.5f);
     }
@@ -35,7 +35,7 @@ public class SaveCommand extends CommandBase {
             if (plugin.getPreferences().getStorageType() == Preferences.MYSQL_STORAGE) plugin.getProfileWriter().saveProfileDB(profile);
         }
         sender.sendMessage(plugin.getLanguageHandler().getMessage(Message.SAVE));
-        if (!(sender instanceof Player)) return;
+        if (!(sender instanceof Player) || !plugin.getPreferences().isCommandSoundsEnabled()) return;
         sound.play(((Player) sender).getLocation(), SoundCategory.MASTER, (Player) sender);
     }
 

@@ -1,17 +1,19 @@
 package com.github.klyser8.karmaoverload.karma.effects;
 
-import com.github.klyser8.karmaoverload.KarmaOverload;
+import com.github.klyser8.karmaoverload.Karma;
 import com.github.klyser8.karmaoverload.api.KarmaEffect;
 import com.github.klyser8.karmaoverload.api.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.*;
+
+import static com.github.klyser8.karmaoverload.util.RandomUtil.isVersion;
 
 public class MobAngerEffect extends KarmaEffect {
 
     private final Sound sound;
     private final int radius;
 
-    public MobAngerEffect(KarmaOverload plugin, double chance, int radius, String permission, Sound angerSound) {
+    public MobAngerEffect(Karma plugin, double chance, int radius, String permission, Sound angerSound) {
         super(plugin, chance, permission);
         this.radius = radius;
         this.sound = angerSound;
@@ -24,7 +26,7 @@ public class MobAngerEffect extends KarmaEffect {
             if (!pigZombie.isAngry() && !soundNull) sound.play(pigZombie.getEyeLocation(), SoundCategory.HOSTILE);
             pigZombie.setTarget(target);
             pigZombie.setAnger(pigZombie.getAnger() + 1);
-        } else if (entity instanceof Bee) {
+        } else if ((isVersion("1.15") || isVersion("1.16")) && entity instanceof Bee) {
             Bee bee = (Bee) entity;
             if (bee.getAnger() == 0 && !soundNull) sound.play(bee.getEyeLocation(), SoundCategory.HOSTILE);
             bee.setAnger(bee.getAnger() + 1);
