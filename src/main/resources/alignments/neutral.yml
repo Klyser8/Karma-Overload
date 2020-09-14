@@ -60,15 +60,7 @@ Actions:
     - minecraft:end/respawn_dragon{chance = 1.0; amount = 250.0; permission = karma.action.adv.respawn_dragon}
 
 Effects:
-  KARMA_MULTIPLIER: chance = 1.0; gainMult = 1.0; lossMult = 1.0; perm = karma.effect.karma_mult;
-  EXP_MULTIPLIER: chance = 0.0; mult = 1.0; permission = karma.effect.exp_mult; sound = entity.experience_orb.pickup(1.0, 2.0)
-  LOOT_GENERATION: chance = 0.0; mult = 1.0; permission = karma.effect.loot; sound = block.note_block.bell(1.0, 1.0)
-  MINERAL_REGEN:
-    - COAL_ORE{chance = 0.0; permission = karma.effect.mineral.regen.coal; appearSound = entity.ender_eye.death(1.0, 2.0)}
-    - REDSTONE_ORE{chance = 0.0; permission = karma.effect.mineral.regen.redstone; appearSound = entity.ender_eye.death(1.0, 2.0)}
-    - LAPIS_ORE{chance = 0.0; permission = karma.effect.mineral.regen.lapis; appearSound = entity.ender_eye.death(1.0, 2.0)}
-    - EMERALD_ORE{chance = 0.0; permission = karma.effect.mineral.regen.emerald; appearSound = entity.ender_eye.death(1.0, 2.0)}
-    - DIAMOND_ORE{chance = 0.0; permission = karma.effect.mineral.regen.diamond; appearSound = entity.ender_eye.death(1.0, 2.0)}
+  KARMA_MULTIPLIER: chance = 1.0; gainMult = 1.25; lossMult = 1.25; permission = karma.effect.karma_mult;
 
 Commands:
   - "say %player% is neutral"

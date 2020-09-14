@@ -62,7 +62,7 @@ Actions:
     - minecraft:end/respawn_dragon{chance = 1.0; amount = 250.0; permission = karma.action.adv.respawn_dragon}
 
 Effects:
-  KARMA_MULTIPLIER: chance = 1.0; gainMult = 1.5; lossMult = 1.0; perm = karma.effect.karma_mult;
+  KARMA_MULTIPLIER: chance = 1.0; gainMult = 1.5; lossMult = 1.0; permission = karma.effect.karma_mult;
   EXP_MULTIPLIER: chance = 0.3; mult = 0.8; permission = karma.effect.exp_mult; sound = block.note_block.bass(1.0, 1.0)
   LIGHTNING: chance = 0.2; permission = karma.effect.lightning; prepareSound = entity.illusioner.prepare_blindness(5.0, 0.75)
   MOB_ANGER: chance = 0.0075; radius = 10; permission = karma.effect.anger; sound = entity.polar_bear.warning(2.0, 1.25)

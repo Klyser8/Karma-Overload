@@ -282,7 +282,7 @@ public class ActionListener implements Listener {
     @EventHandler
     public void onAdvancement(PlayerAdvancementDoneEvent event) {
         String eventKey = event.getAdvancement().getKey().toString();
-        System.out.println(eventKey);
+//        System.out.println(eventKey);
         Player player = event.getPlayer();
         KarmaProfile profile = plugin.getProfileProvider().getProfile(player);
         if (profile == null) {

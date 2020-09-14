@@ -7,8 +7,8 @@ Language: English
 #HIGH: debugging on Karma changes and alignment changes, plus the above
 Debug Level: NONE
 
-#Whether commands should play sounds when being used.
-Command Sound: true
+#Auto-save interval (In seconds)
+Autosave Interval: 120
 
 ###STORAGE CONFIGURATION####
 
@@ -17,9 +17,6 @@ Command Sound: true
 #2: MySQL Database
 #When changing storage type, to easily move the data from Json to the database simply do '/karma reload' followed by '/karma save' after changing this field.
 Storage Type: 1
-
-#Auto-save interval (In seconds)
-Autosave Interval: 120
 
 ###DATABASE CONFIGURATION###
 Database:
@@ -52,14 +49,13 @@ Karma Gain Particle: VILLAGER_HAPPY
 #Typing "null" will result in no particles playing
 Karma Loss Particle: SPELL_WITCH
 
-#Whether the karma limit should be a soft cap or not.
-#If this is set to true, a player's Karma will change even if it would go over their alignment's Karma limit, as long as they are not above it before the Karma has changed.
-#  - Example: Player's alignment limit is 300 Karma. The player's current recent Karma is 290, and they gain 30 from a single source.
-#             The player gains the 30 Karma, reaching 320 recent Karma. Their Karma will not change any further until the recent Karma is reset.
+#Whether commands should play sounds when being used.
+Command Sound: true
 
-#If this is set to false, a player's Karma will not change if it would go over their current Karma limit.
-#  - Example: Player's alignment limit is 300 Karma. The player's current recent Karma is 290, and they lose 15 from a single source.
-#             The player does not lose any Karma, as it would go over their alignment's limit.
+#Whether the karma limit should be a soft cap or not.
+#If a player gains/loses Karma exceeding their Karma limit when this is set to true, they will gain/lose that Karma amount,
+#but their Karma won't change anymore after that as it reached its limit.
+#If a player gains/loses Karma exceeding their Karma limit when this is set to false, they won't be able to gain/lose it.
 Karma Soft Cap: true
 
 #Gamemodes which Karma will take effect.
