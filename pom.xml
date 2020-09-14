@@ -6,7 +6,7 @@
 
     <groupId>com.github.klyser8</groupId>
     <artifactId>karma-overload</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.2</version>
     <packaging>jar</packaging>
 
     <name>Karma-Overload</name>
