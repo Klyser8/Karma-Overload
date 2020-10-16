@@ -97,6 +97,16 @@ public class ProfileWriter {
                     " WHERE NOT EXISTS (" +
                     " SELECT UUID From KarmaTable WHERE UUID ='" + uuid + "') LIMIT 1;";
 
+            try {
+                PreparedStatement statement = plugin.getConnection().prepareStatement(addUserSQLQuery);
+                statement.executeUpdate();
+                statement = plugin.getConnection().prepareStatement(updateSQLQuery);
+                statement.executeUpdate();
+            } catch (SQLException throwable) {
+                throwable.printStackTrace();
+            }
+
+            if (profile.getHistory().size() == 0) return;
             String deleteHistoryQuery = "DELETE FROM KarmaHistory WHERE UUID = '" + uuid + "';";
             String addHistoryQuery = "INSERT INTO KarmaHistory VALUES";
             for (KarmaProfile.HistoryEntry entry : profile.getHistory()) {
@@ -105,19 +115,13 @@ public class ProfileWriter {
                 addHistoryQuery += " ('" + uuid + "', '" + sdf.format(entry.getDate()) + "', '" + entry.getSource() + "', " + entry.getAmount() + "),";
             }
             addHistoryQuery = StringUtils.removeEnd(addHistoryQuery, ",") + ";";
-
             try {
-                PreparedStatement statement = plugin.getConnection().prepareStatement(addUserSQLQuery);
-                statement.executeUpdate();
-                statement = plugin.getConnection().prepareStatement(updateSQLQuery);
-                statement.executeUpdate();
-
-                statement = plugin.getConnection().prepareStatement(deleteHistoryQuery);
+                PreparedStatement statement = plugin.getConnection().prepareStatement(deleteHistoryQuery);
                 statement.executeUpdate();
                 statement = plugin.getConnection().prepareStatement(addHistoryQuery);
                 statement.executeUpdate();
-            } catch (SQLException throwable) {
-                throwable.printStackTrace();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
             }
         });
     }

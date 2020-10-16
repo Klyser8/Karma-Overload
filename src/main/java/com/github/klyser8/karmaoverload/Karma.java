@@ -59,7 +59,6 @@ public final class Karma extends JavaPlugin {
         preferences.loadPreferences();
         if (preferences.getStorageType() == Preferences.MYSQL_STORAGE) {
             connectMySQLDB();
-            createDBTables();
         }
         languageHandler.setup();
         CommandManager commandManager = new CommandManager(this, true);
@@ -113,7 +112,7 @@ public final class Karma extends JavaPlugin {
     }
 
     private void createDBTables() {
-        String queryExists = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '<TABLE_NAME>';";
+        String queryExists = "SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '<TABLE_NAME>' AND TABLE_SCHEMA = '" + preferences.getDbName() + "';";
         String createKarmaTableQuery = "CREATE TABLE `KarmaTable` (" +
                 "`UUID` VARCHAR(50) NOT NULL COLLATE `utf8_general_ci`," +
                 "`Score` DOUBLE(22,1) NULL DEFAULT " + preferences.getStartingScore() + "," +
@@ -137,6 +136,9 @@ public final class Karma extends JavaPlugin {
             if (!resultSet.next()) {
                 statement = connection.prepareStatement(createKarmaTableQuery);
                 statement.executeUpdate();
+                debugMessage(this, "Karma Table does not exist, creating...", DebugLevel.LOW);
+            } else {
+                debugMessage(this, "Karma Table already exists.", DebugLevel.LOW);
             }
             queryExists = queryExists.replace("KarmaTable", "KarmaHistory");
             statement = connection.prepareStatement(queryExists);
@@ -144,8 +146,10 @@ public final class Karma extends JavaPlugin {
             if (!resultSet.next()) {
                 statement = connection.prepareStatement(createKarmaHistoryQuery);
                 statement.executeUpdate();
+                debugMessage(this, "Karma History does not exist, creating...", DebugLevel.LOW);
+            } else {
+                debugMessage(this, "Karma History already exists.", DebugLevel.LOW);
             }
-            debugMessage(this, "Created KarmaHistory & KarmaTable tables successfully!", DebugLevel.LOW);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
